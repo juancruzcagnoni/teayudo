@@ -1,0 +1,100 @@
+.container {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.meditacionHeader {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 2rem;
+  padding-top: 1.8rem;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.meditacionHeader p {
+  margin-bottom: 0;
+  margin-top: 0;
+  color: var(--text-color);
+  padding-right: 2rem;
+}
+
+.meditacionHeader h1 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.meditacionImagenContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.meditacionImagenContainer img{
+  width: 80px;
+  object-fit: cover;
+}
+
+.meditacionItem {
+  margin: 0.8rem 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #912c8c2f;
+  padding: 0.8rem 1rem;
+}
+
+.meditacionItemLeft {
+  display: flex;
+  align-items: center;
+}
+
+.meditacionItemLeft p {
+  margin: 0;
+}
+
+.meditacionItemText {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  padding-right: 1rem;
+}
+
+.meditacionTitulo {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.meditacionSubtitulo {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.meditacionImagen {
+  width: 100%;
+  max-width: 40px;
+  height: auto;
+}
+
+.playPauseButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--primary-color);
+  padding: 1rem 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    margin: 0;
+  }
+}

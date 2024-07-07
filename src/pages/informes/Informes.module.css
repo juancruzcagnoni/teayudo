@@ -1,0 +1,242 @@
+/* Crear */
+.crear {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 0.6rem 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--font-family);
+  font-weight: 600;
+}
+
+.camposFlex {
+  display: flex;
+  justify-content: space-between;
+}
+
+textarea {
+  border: 1px solid var(--text-color);
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  background-color: var(--background-color);
+  height: 150px;
+}
+
+.formContainer{
+  margin-top: 1rem;
+}
+
+
+/* Leer */
+.createButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f5b80f5a;
+  color: var(--primary-color);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  z-index: 1000;
+  padding: 0.5rem;
+  border-radius: 5px;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ordenButton {
+  color: var(--primary-color);
+}
+
+.createButton:hover {
+  background-color: var(
+    --secondary-color-light
+  ); /* Color de fondo al pasar el mouse */
+}
+
+.informesList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.informeItem {
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.informeItem:hover {
+  background-color: #f0f0f0;
+}
+
+.informeContent {
+  margin: 0.8rem 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #912c8c2f;
+  padding: 0.6rem 0.8rem;
+}
+
+.informeInfo {
+  display: flex;
+  align-items: center;
+}
+
+.informeInfo h3 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+
+.informeInfo p {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 0.8rem;
+}
+
+.fecha {
+  margin-right: 10px;
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
+.icon {
+  margin-right: 0.8rem;
+  color: var(--primary-color);
+  padding: 8px 8px;
+  height: 20px;
+  width: 20px;
+}
+
+.iconChevron {
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+/* Ver */
+.verInformeContainer {
+  margin-top: 20px;
+}
+
+.informeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.informeHeader h2 {
+  margin: 0;
+}
+
+.buttonsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.downloadButton {
+  color: blue;
+  background-color: rgba(0, 0, 255, 0.2);
+  padding: 0.3rem;
+  border-radius: 5px;
+  height: 30px;
+  width: 30px;
+  margin: 5px;
+}
+
+.deleteButton {
+  color: red;
+  background-color: rgba(255, 0, 0, 0.212);
+  padding: 0.3rem;
+  border-radius: 5px;
+  height: 30px;
+  width: 30px;
+  margin: 5px;
+}
+
+.editButton {
+  color: green;
+  background-color: rgba(0, 128, 0, 0.223);
+  padding: 0.3rem;
+  border-radius: 5px;
+  height: 30px;
+  width: 30px;
+  margin: 5px;
+}
+
+.informeTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.columnInforme {
+  display: flex;
+  flex-direction: column;
+}
+
+.rowInforme {
+  display: flex;
+  flex-direction: row;
+}
+
+.informeTable td {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+.informeTable tr {
+  width: 100%;
+}
+
+.tableHeader {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.tableHeaderTitulo {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2rem;
+  text-decoration: underline;
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.padding-page {
+  padding: 20px;
+}
+
+.backButton {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+/* Editar  */
+.editar {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 0.6rem 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--font-family);
+  font-weight: 600;
+}

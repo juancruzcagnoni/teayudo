@@ -1,0 +1,95 @@
+.container {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.camposContainer {
+  margin-bottom: 1rem;
+}
+
+.form {
+  margin-top: 1rem;
+}
+
+.actualizar {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 0.6rem 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--font-family);
+  font-weight: 600;
+}
+
+.actualizar:hover {
+  background-color: var(--secondary-color);
+}
+
+.flex{
+  display: flex;
+}
+
+.imageContainerEdit{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.addPhotoText{
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--primary-color);
+  margin-top: 0.5rem;
+}
+
+.imageInput{
+  border: none;
+}
+
+.profileImagePreview {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.profileImagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+.removeImageIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    margin: 0;
+  }
+}

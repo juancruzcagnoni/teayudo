@@ -1,0 +1,154 @@
+.topProfileSection {
+  padding: 0 0.8rem;
+  padding-top: 1.4rem;
+}
+
+.perfilContainer {
+  width: 60%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.editButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 0.5rem;
+  border-radius: 5px;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.topHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+}
+
+.perfilImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.perfilImage img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 3px solid var(--secondaryv2-color);
+}
+
+.perfilHeader {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.perfilHeader h2 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.2rem;
+}
+
+.changePhoto {
+  color: var(--primary-color);
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: 0.9;
+}
+
+.perfilHeader p {
+  margin: 0;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.bottomProfileSection {
+  padding: 0 0.8rem;
+  padding-top: 0.8rem;
+  padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bottomProfileSection h3 {
+  color: var(--primary-color);
+}
+
+.informesSection {
+  margin: 0.8rem 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #912c8c2f;
+  padding: 0.6rem 0.8rem;
+}
+
+.linksInformes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.linksInformes a {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.linksInformesIcon {
+  color: var(--primary-color);
+  border-radius: 5px;
+  padding: 8px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.8rem;
+}
+
+.iconInformes {
+  height: 20px;
+  width: 20px;
+}
+
+.icon,
+.arrowIcon {
+  margin-right: 10px;
+}
+
+.arrowIcon {
+  margin-left: auto;
+  color: var(--primary-color);
+}
+
+.linksCerrarSesion {
+  font-weight: 600;
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  text-align: center;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .perfilContainer {
+    width: 100%;
+    margin: 0;
+  }
+
+  .perfilImage {
+    width: 100%;
+  }
+}

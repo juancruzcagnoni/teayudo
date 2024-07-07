@@ -1,0 +1,221 @@
+import React, { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc, deleteDoc } from "firebase/firestore";
+import { useParams, useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faDownload,
+  faTrash,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
+import app from "../../js/config";
+import { Oval } from "react-loader-spinner";
+import styles from "./Informes.module.css";
+import ModalConfirmacion from "../../components/modal/Modal";
+
+const VerInforme = () => {
+  const { informeId } = useParams();
+  const [informe, setInforme] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userType, setUserType] = useState("");
+  const [creadorInforme, setCreadorInforme] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate("/leer-informes");
+  };
+
+  useEffect(() => {
+    const fetchInforme = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, "usuarios", user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        if (userDocSnapshot.exists()) {
+          const userData = userDocSnapshot.data();
+          setUserType(userData.userType);
+        }
+
+        const informeDocRef = doc(db, "informes", informeId);
+        const docSnapshot = await getDoc(informeDocRef);
+        if (docSnapshot.exists()) {
+          const informeData = docSnapshot.data();
+          setInforme(informeData);
+
+          const creadorDocRef = doc(db, "usuarios", informeData.userId);
+          const creadorDocSnapshot = await getDoc(creadorDocRef);
+          if (creadorDocSnapshot.exists()) {
+            const creadorData = creadorDocSnapshot.data();
+            setCreadorInforme(`${creadorData.name} ${creadorData.apellido}`);
+          }
+
+          setLoading(false);
+        } else {
+          console.error("Informe no encontrado");
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchInforme();
+  }, [auth, db, informeId]);
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text(informe.titulo, 10, 20);
+    doc.setFontSize(16);
+    doc.text(informe.subtitulo, 10, 30);
+    doc.setFontSize(12);
+    doc.text(`Fecha: ${new Date(informe.fecha).toLocaleDateString()}`, 10, 40);
+    doc.text("Descripción:", 10, 50);
+    doc.text(informe.descripcion, 10, 60, { maxWidth: 180 });
+    doc.text(`Persona Evaluada: ${informe.personaEvaluada}`, 10, 120);
+    doc.save(`${informe.titulo}.pdf`);
+  };
+
+  const handleDeleteInforme = async () => {
+    try {
+      await deleteDoc(doc(db, "informes", informeId));
+      navigate("/leer-informes");
+    } catch (error) {
+      console.error("Error al eliminar el informe:", error);
+    }
+  };
+
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+  };
+
+  const openDownloadModal = () => {
+    setShowDownloadModal(true);
+  };
+
+  const closeDownloadModal = () => {
+    setShowDownloadModal(false);
+  };
+
+  const confirmDownloadPDF = () => {
+    handleDownloadPDF();
+    closeDownloadModal();
+  };
+
+  const handleEditInforme = () => {
+    navigate(`/editar-informe/${informeId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="loaderContainer">
+        <Oval
+          height={80}
+          width={80}
+          color="#912C8C"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="#F5B60F"
+          strokeWidth={5}
+          strokeWidthSecondary={5}
+        />
+      </div>
+    );
+  }
+
+  if (!informe) {
+    return <p>Informe no encontrado.</p>;
+  }
+
+  return (
+    <div className="padding-page">
+      <a onClick={handleBack} className="backButton">
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </a>
+      <div className={styles.verInformeContainer}>
+        <table className={styles.informeTable}>
+          <tbody>
+            <tr>
+              <td className={styles.tableHeaderTitulo}>{informe.titulo}</td>
+            </tr>
+            <div className={styles.rowInforme}>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Fecha</td>
+                <td>{new Date(informe.fecha).toLocaleDateString()}</td>
+              </tr>
+              
+              {userType === "niño/a" && (
+                <tr className={styles.columnInforme}>
+                  <td className={styles.tableHeader}>Creado por</td>
+                  <td>{creadorInforme}</td>
+                </tr>
+              )}
+            </div>
+            <tr className={styles.columnInforme}>
+              <td className={styles.tableHeader}>Descripción</td>
+              <td>{informe.descripcion}</td>
+            </tr>
+            <tr className={styles.rowInforme}>
+              <td className={styles.tableHeader}>Persona Evaluada</td>
+              <td>{informe.personaEvaluada}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className={styles.informeHeader}>
+          <div className={styles.buttonsContainer}>
+            <button
+              onClick={openDownloadModal}
+              className={styles.downloadButton}
+            >
+              <FontAwesomeIcon icon={faDownload} />
+            </button>
+            {userType !== "niño/a" && (
+              <>
+                <button
+                  onClick={handleEditInforme}
+                  className={styles.editButton}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button
+                  onClick={openDeleteModal}
+                  className={styles.deleteButton}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {showDeleteModal && (
+        <ModalConfirmacion
+          mensaje="¿Estás seguro que deseas eliminar este informe?"
+          onConfirm={handleDeleteInforme}
+          onCancel={closeDeleteModal}
+        />
+      )}
+
+      {showDownloadModal && (
+        <ModalConfirmacion
+          mensaje="¿Estás seguro que deseas descargar este informe?"
+          onConfirm={confirmDownloadPDF}
+          onCancel={closeDownloadModal}
+        />
+      )}
+    </div>
+  );
+};
+
+export default VerInforme;

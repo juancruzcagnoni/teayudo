@@ -1,0 +1,10 @@
+.ingresar {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 0.6rem 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: var(--font-family);
+  font-weight: 600;
+}

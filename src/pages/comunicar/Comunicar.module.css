@@ -1,0 +1,130 @@
+.categorias {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  /* padding-bottom: 10px; */
+  margin-bottom: 1rem;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.categorias::-webkit-scrollbar {
+  display: none;
+}
+
+.categoriaBoton {
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 6px 15px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.header {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  background-color: var(--secondaryv2-color);
+  color: var(--primary-color);
+  padding: 10px;
+  border-radius: 5px;
+  width: calc(50% - 10px);
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.item p {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.item img {
+  max-width: 50%;
+  max-height: 50%;
+  margin-top: auto;
+  align-self: flex-end;
+}
+
+.item a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.favoritoButton {
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: var(--primary-color);
+  width: auto;
+  margin: 0;
+}
+
+.favoritoMostrarContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.favoritoMostrar {
+  background-color: var(--secondaryv2-color);
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: var(--primary-color);
+  position: block;
+  right: 15px;
+  top: 35px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .item {
+    width: calc(25% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    margin: 0;
+  }
+  
+  .header {
+    width: 100%;
+    margin: 0;
+  }
+}
