@@ -9,11 +9,7 @@ import {
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject,
 } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -91,9 +87,7 @@ const EditarPerfil = () => {
       if (newEmail && newEmail !== user.email) {
         await reauthenticateWithCredential(user, credential);
         await sendEmailVerification(user);
-        setMessage(
-          "Se ha enviado un correo de verificación. Por favor verifica tu nuevo correo electrónico."
-        );
+        setMessage("Se ha enviado un correo de verificación. Por favor verifica tu nuevo correo electrónico.");
         setUpdating(false);
         return;
       }
@@ -128,9 +122,7 @@ const EditarPerfil = () => {
       }, 3000);
     } catch (error) {
       if (error.code === "auth/requires-recent-login") {
-        setMessage(
-          "Por favor, vuelva a iniciar sesión para realizar esta operación."
-        );
+        setMessage("Por favor, vuelva a iniciar sesión para realizar esta operación.");
       } else {
         console.error("Error al actualizar perfil:", error);
         setMessage(`Error al actualizar perfil: ${error.message}`);
@@ -151,6 +143,7 @@ const EditarPerfil = () => {
   const handleProfileImageChange = (e) => {
     if (e.target.files[0]) {
       setProfileImage(e.target.files[0]);
+      setProfileImageUrl(URL.createObjectURL(e.target.files[0]));
     }
   };
 
@@ -209,16 +202,16 @@ const EditarPerfil = () => {
                 </a>
               </div>
             )}
-             <label htmlFor="profileImageInput" className={styles.addPhotoText}>
-                Agregar
-              </label>
-              <input
-                type="file"
-                id="profileImageInput"
-                accept="image/*"
-                onChange={handleProfileImageChange}
-                style={{ display: "none" }}
-              />
+            <label htmlFor="profileImageInput" className={styles.addPhotoText}>
+              Agregar
+            </label>
+            <input
+              type="file"
+              id="profileImageInput"
+              accept="image/*"
+              onChange={handleProfileImageChange}
+              style={{ display: "none" }}
+            />
           </div>
           <div className="camposContainer">
             <label>Nombre</label>
@@ -229,7 +222,7 @@ const EditarPerfil = () => {
             />
           </div>
           <div className="camposContainer">
-            <label>Apellido</label> {/* Campo para el apellido */}
+            <label>Apellido</label>
             <input
               type="text"
               value={surname}
