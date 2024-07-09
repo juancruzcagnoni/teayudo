@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc, deleteDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -70,25 +71,28 @@ const VerInforme = () => {
     const doc = new jsPDF();
     doc.setFontSize(20);
     doc.text(informe.titulo, 10, 20);
-    doc.setFontSize(16);
-    doc.text(`Fecha: ${new Date(informe.fecha).toLocaleDateString()}`, 10, 30);
-    doc.setFontSize(12);
-    doc.text(`Persona Evaluada: ${informe.personaEvaluada}`, 10, 40);
-    doc.text(`Diagnóstico: ${informe.diagnostico}`, 10, 50);
-    doc.text(`Escuela: ${informe.escuela}`, 10, 60);
-    doc.text(`Grado/Año: ${informe.grado}`, 10, 70);
-    doc.text("Objetivos:", 10, 80);
-    doc.text(informe.objetivos, 10, 90, { maxWidth: 180 });
-    doc.text("Fortalezas en el Desempeño:", 10, 110);
-    doc.text(informe.fortalezas, 10, 120, { maxWidth: 180 });
-    doc.text("Desafíos en el Desempeño:", 10, 140);
-    doc.text(informe.desafios, 10, 150, { maxWidth: 180 });
-    doc.text("Intervenciones:", 10, 170);
-    doc.text(informe.intervenciones, 10, 180, { maxWidth: 180 });
-    doc.text("Observaciones:", 10, 200);
-    doc.text(informe.observaciones, 10, 210, { maxWidth: 180 });
+  
+    const tableRows = [
+      ["Fecha", new Date(informe.fecha).toLocaleDateString()],
+      ["Persona Evaluada", informe.personaEvaluada],
+      ["Diagnóstico", informe.diagnostico],
+      ["Escuela", informe.escuela],
+      ["Grado/Año", informe.grado],
+      ["Objetivos", informe.objetivos],
+      ["Fortalezas en el Desempeño", informe.fortalezas],
+      ["Desafíos en el Desempeño", informe.desafios],
+      ["Intervenciones", informe.intervenciones],
+      ["Observaciones", informe.observaciones],
+    ];
+  
+    doc.autoTable({
+      head: [["Campo", "Valor"]],
+      body: tableRows,
+      startY: 30,
+    });
+  
     doc.save(`${informe.titulo}.pdf`);
-  };
+  };  
 
   const handleDeleteInforme = async () => {
     try {
@@ -158,18 +162,16 @@ const VerInforme = () => {
             <tr>
               <td className={styles.tableHeaderTitulo}>{informe.titulo}</td>
             </tr>
-            <div className={styles.camposFlex}>
+            <tr className={styles.columnInforme}>
+              <td className={styles.tableHeader}>Fecha</td>
+              <td>{new Date(informe.fecha).toLocaleDateString()}</td>
+            </tr>
+            {userType === "niño/a" && (
               <tr className={styles.columnInforme}>
-                <td className={styles.tableHeader}>Fecha</td>
-                <td>{new Date(informe.fecha).toLocaleDateString()}</td>
+                <td className={styles.tableHeader}>Creado por</td>
+                <td>{creadorInforme}</td>
               </tr>
-              {userType === "niño/a" && (
-                <tr className={styles.columnInforme}>
-                  <td className={styles.tableHeader}>Creado por</td>
-                  <td>{creadorInforme}</td>
-                </tr>
-              )}
-            </div>
+            )}
             <tr className={styles.columnInforme}>
               <td className={styles.tableHeader}>Niño/a</td>
               <td>{informe.personaEvaluada}</td>
@@ -178,16 +180,14 @@ const VerInforme = () => {
               <td className={styles.tableHeader}>Diagnóstico</td>
               <td>{informe.diagnostico}</td>
             </tr>
-            <div className={styles.camposFlex}>
-              <tr className={styles.columnInforme}>
-                <td className={styles.tableHeader}>Escuela</td>
-                <td>{informe.escuela}</td>
-              </tr>
-              <tr className={styles.columnInforme}>
-                <td className={styles.tableHeader}>Grado/Año</td>
-                <td>{informe.grado}</td>
-              </tr>
-            </div>
+            <tr className={styles.columnInforme}>
+              <td className={styles.tableHeader}>Escuela</td>
+              <td>{informe.escuela}</td>
+            </tr>
+            <tr className={styles.columnInforme}>
+              <td className={styles.tableHeader}>Grado/Año</td>
+              <td>{informe.grado}</td>
+            </tr>
             <tr className={styles.columnInforme}>
               <td className={styles.tableHeader}>Objetivos</td>
               <td>{informe.objetivos}</td>
