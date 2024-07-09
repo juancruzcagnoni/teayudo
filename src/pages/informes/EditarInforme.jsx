@@ -7,15 +7,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Oval } from "react-loader-spinner";
 import styles from "./Informes.module.css";
+import ModalConfirmacion from "../../components/modal/Modal"; 
 
 const EditarInforme = () => {
   const { informeId } = useParams();
   const [informe, setInforme] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [fecha, setFecha] = useState("");
-  const [descripcion, setDescripcion] = useState("");
   const [personaEvaluada, setPersonaEvaluada] = useState("");
+  const [diagnostico, setDiagnostico] = useState("");
+  const [escuela, setEscuela] = useState("");
+  const [grado, setGrado] = useState("");
+  const [objetivos, setObjetivos] = useState("");
+  const [fortalezas, setFortalezas] = useState("");
+  const [desafios, setDesafios] = useState("");
+  const [intervenciones, setIntervenciones] = useState("");
+  const [observaciones, setObservaciones] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [error, setError] = useState("");
   const auth = getAuth(app);
   const db = getFirestore(app);
   const navigate = useNavigate();
@@ -31,8 +42,15 @@ const EditarInforme = () => {
           setInforme(informeData);
           setTitulo(informeData.titulo);
           setFecha(informeData.fecha);
-          setDescripcion(informeData.descripcion);
           setPersonaEvaluada(informeData.personaEvaluada);
+          setDiagnostico(informeData.diagnostico);
+          setEscuela(informeData.escuela);
+          setGrado(informeData.grado);
+          setObjetivos(informeData.objetivos);
+          setFortalezas(informeData.fortalezas);
+          setDesafios(informeData.desafios);
+          setIntervenciones(informeData.intervenciones);
+          setObservaciones(informeData.observaciones);
           setLoading(false);
         } else {
           console.error("Informe no encontrado");
@@ -46,22 +64,41 @@ const EditarInforme = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowModal(true);
+  };
+
+  const handleBack = () => {
+    navigate(`/ver-informe/${informeId}`);
+  };
+
+  const confirmCreateInforme = async () => {
     try {
       const informeDocRef = doc(db, "informes", informeId);
       await updateDoc(informeDocRef, {
         titulo,
         fecha,
-        descripcion,
         personaEvaluada,
+        diagnostico,
+        escuela,
+        grado,
+        objetivos,
+        fortalezas,
+        desafios,
+        intervenciones,
+        observaciones,
       });
+
+      setSuccessMessage("Informe creado exitosamente");
+      setError("");
       navigate(`/ver-informe/${informeId}`);
     } catch (error) {
       console.error("Error al actualizar el informe:", error);
+      setError("Error al editar el informe. Inténtalo de nuevo más tarde.");
     }
   };
 
-  const handleBack = () => {
-    navigate(`/ver-informe/${informeId}`);
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   if (loading) {
@@ -105,7 +142,7 @@ const EditarInforme = () => {
             />
           </div>
           <div className={styles.camposFlex}>
-            <div className="camposContainer">
+            <div className="camposContainer" style={{ width: "60%" }}>
               <label>Persona Evaluada</label>
               <input
                 type="text"
@@ -114,7 +151,10 @@ const EditarInforme = () => {
                 required
               />
             </div>
-            <div className="camposContainer">
+            <div
+              className="camposContainer"
+              style={{ width: "40%", marginLeft: "0.5rem" }}
+            >
               <label>Fecha</label>
               <input
                 type="date"
@@ -125,18 +165,95 @@ const EditarInforme = () => {
             </div>
           </div>
           <div className="camposContainer">
-            <label>Descripción</label>
+            <label>Diagnóstico</label>
+            <input
+              type="text"
+              value={diagnostico}
+              onChange={(e) => setDiagnostico(e.target.value)}
+              required
+            />
+          </div>
+          <div className={styles.camposFlex}>
+            <div className="camposContainer" style={{ width: "60%" }}>
+              <label>Escuela</label>
+              <input
+                type="text"
+                value={escuela}
+                onChange={(e) => setEscuela(e.target.value)}
+                required
+              />
+            </div>
+            <div
+              className="camposContainer"
+              style={{ width: "40%", marginLeft: "0.5rem" }}
+            >
+              <label>Grado/Año</label>
+              <input
+                type="text"
+                value={grado}
+                onChange={(e) => setGrado(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          <div className="camposContainer">
+            <label>Objetivos</label>
             <textarea
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
+              value={objetivos}
+              onChange={(e) => setObjetivos(e.target.value)}
+              required
+              style={{ height: "50px" }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Fortalezas en el Desempeño</label>
+            <textarea
+              value={fortalezas}
+              onChange={(e) => setFortalezas(e.target.value)}
+              required
+              style={{ height: "50px" }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Desafíos en el Desempeño</label>
+            <textarea
+              value={desafios}
+              onChange={(e) => setDesafios(e.target.value)}
+              required
+              style={{ height: "50px" }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Intervenciones</label>
+            <textarea
+              value={intervenciones}
+              onChange={(e) => setIntervenciones(e.target.value)}
+              required
+              style={{ height: "50px" }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Observaciones</label>
+            <textarea
+              value={observaciones}
+              onChange={(e) => setObservaciones(e.target.value)}
               required
             ></textarea>
           </div>
+          {error && <p className="error">{error}</p>}
+          {successMessage && <p className="success">{successMessage}</p>}
           <button type="submit" className={styles.editar}>
             Guardar cambios
           </button>
         </form>
       </div>
+      {showModal && (
+        <ModalConfirmacion
+          mensaje="¿Estás seguro que deseas editar este informe?"
+          onConfirm={confirmCreateInforme}
+          onCancel={closeModal}
+        />
+      )}
     </div>
   );
 };

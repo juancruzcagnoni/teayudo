@@ -4,11 +4,7 @@ import app from "../../js/config";
 import { Oval } from "react-loader-spinner";
 import styles from "./Meditacion.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlay,
-  faPause,
-  faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ModalInfo from "../../components/modal-info/ModalInfo";
 import TextoAnimado from "../../components/texto-meditacion/TextoAnimado"; // Importar el componente
 import MeditacionImagen from "../../assets/meditation-svgrepo-com.svg";
@@ -21,7 +17,6 @@ const Meditacion = () => {
   const [currentAudioIndex, setCurrentAudioIndex] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showTextoAnimado, setShowTextoAnimado] = useState(false); // Estado para mostrar el texto animado
-
   const db = getFirestore(app);
 
   const openModal = () => {
@@ -47,6 +42,19 @@ const Meditacion = () => {
 
     fetchMeditaciones();
   }, [db]);
+
+  // Manejar el efecto de limpieza al desmontar el componente
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause();
+        setCurrentAudio(null);
+        setIsPlaying(false);
+        setCurrentAudioIndex(null);
+        setShowTextoAnimado(false);
+      }
+    };
+  }, [currentAudio]);
 
   const handleButtonClick = (sonidoUrl, index) => {
     if (currentAudio && currentAudioIndex === index) {
@@ -105,9 +113,7 @@ const Meditacion = () => {
       <div className={styles.meditacionHeader}>
         <div>
           <h1>Meditación</h1>
-          <p>
-            Buen momento para relajarnos! Elegí la que mas te guste.
-          </p>
+          <p>Buen momento para relajarnos! Elige la que más te guste.</p>
         </div>
         <div className={styles.meditacionImagenContainer}>
           <img src={MeditacionImagen} alt="" />

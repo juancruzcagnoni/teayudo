@@ -11,13 +11,19 @@ import ModalConfirmacion from "../../components/modal/Modal";
 
 const CrearInforme = () => {
   const [titulo, setTitulo] = useState("");
-  const [subtitulo, setSubtitulo] = useState("");
   const [fecha, setFecha] = useState("");
-  const [descripcion, setDescripcion] = useState("");
   const [personaEvaluada, setPersonaEvaluada] = useState(null);
+  const [diagnostico, setDiagnostico] = useState("");
+  const [escuela, setEscuela] = useState("");
+  const [grado, setGrado] = useState("");
+  const [objetivos, setObjetivos] = useState("");
+  const [fortalezas, setFortalezas] = useState("");
+  const [desafios, setDesafios] = useState("");
+  const [intervenciones, setIntervenciones] = useState("");
+  const [observaciones, setObservaciones] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [showModal, setShowModal] = useState(false); // Estado para la ventana modal de confirmación
+  const [showModal, setShowModal] = useState(false);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const navigate = useNavigate();
@@ -29,7 +35,7 @@ const CrearInforme = () => {
   const handleSubmit = async () => {
     const user = auth.currentUser;
 
-    if (!titulo || !subtitulo || !fecha || !descripcion || !personaEvaluada) {
+    if (!titulo || !fecha || !personaEvaluada) {
       setError("Todos los campos son obligatorios");
       return;
     }
@@ -37,10 +43,16 @@ const CrearInforme = () => {
     try {
       const docRef = await addDoc(collection(db, "informes"), {
         titulo,
-        subtitulo,
         fecha,
-        descripcion,
         personaEvaluada: personaEvaluada.value, // Guarda el email seleccionado
+        diagnostico,
+        escuela,
+        grado,
+        objetivos,
+        fortalezas,
+        desafios,
+        intervenciones,
+        observaciones,
         userId: user.uid,
       });
 
@@ -102,18 +114,9 @@ const CrearInforme = () => {
               required
             />
           </div>
-          <div className="camposContainer">
-            <label>Subtítulo</label>
-            <input
-              type="text"
-              value={subtitulo}
-              onChange={(e) => setSubtitulo(e.target.value)}
-              required
-            />
-          </div>
           <div className={styles.camposFlex}>
-            <div className="camposContainer">
-              <label>Persona Evaluada</label>
+            <div className="camposContainer" style={{ width: '60%' }}>
+              <label>Niño/a</label>
               <AsyncSelect
                 cacheOptions
                 loadOptions={loadOptions}
@@ -124,7 +127,7 @@ const CrearInforme = () => {
                 required
               />
             </div>
-            <div className="camposContainer">
+            <div className="camposContainer" style={{ width: '40%' , marginLeft: '0.5rem' }}>
               <label>Fecha</label>
               <input
                 type="date"
@@ -135,10 +138,68 @@ const CrearInforme = () => {
             </div>
           </div>
           <div className="camposContainer">
-            <label>Descripción</label>
+            <label>Diagnóstico</label>
+            <input
+              type="text"
+              value={diagnostico}
+              onChange={(e) => setDiagnostico(e.target.value)}
+            />
+          </div>
+          <div className={styles.camposFlex}>
+            <div className="camposContainer" style={{ width: '60%' }}>
+              <label>Escuela</label>
+              <input
+                type="text"
+                value={escuela}
+                onChange={(e) => setEscuela(e.target.value)}
+              />
+            </div>
+            <div className="camposContainer" style={{ width: '40%', marginLeft: '0.5rem' }}>
+              <label>Grado/Año</label>
+              <input
+                type="text"
+                value={grado}
+                onChange={(e) => setGrado(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="camposContainer">
+            <label>Objetivos</label>
             <textarea
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
+              value={objetivos}
+              onChange={(e) => setObjetivos(e.target.value)}
+              style={{ height: '50px' }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Fortalezas en el Desempeño</label>
+            <textarea
+              value={fortalezas}
+              onChange={(e) => setFortalezas(e.target.value)}
+              style={{ height: '50px' }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Desafíos en el Desempeño</label>
+            <textarea
+              value={desafios}
+              onChange={(e) => setDesafios(e.target.value)}
+              style={{ height: '50px' }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Intervenciones</label>
+            <textarea
+              value={intervenciones}
+              onChange={(e) => setIntervenciones(e.target.value)}
+              style={{ height: '50px' }}
+            ></textarea>
+          </div>
+          <div className="camposContainer">
+            <label>Observaciones</label>
+            <textarea
+              value={observaciones}
+              onChange={(e) => setObservaciones(e.target.value)}
               required
             ></textarea>
           </div>

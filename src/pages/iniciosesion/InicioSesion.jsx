@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  AuthErrorCodes,
+} from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import validator from "https://cdn.skypack.dev/validator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,12 +15,17 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const auth = getAuth(app);
   const db = getFirestore(app);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Limpiar mensajes anteriores
+    setLoginError("");
+    setSuccessMessage("");
 
     if (!validator.isEmail(email)) {
       setLoginError("El email no es valido");
@@ -59,12 +68,12 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           errorMessage =
             "Usuario no encontrado. Verifique su email y contraseña.";
           break;
-        case "auth/wrong-password":
+        case "auth/invalid-password":
           errorMessage = "Contraseña incorrecta. Verifique su contraseña.";
           break;
         default:
           errorMessage =
-            "Error al iniciar sesión. Inténtelo de nuevo más tarde.";
+            "Error al iniciar sesión. Revise sus credenciales.";
       }
 
       setLoginError(errorMessage);
@@ -101,9 +110,8 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
               required
             />
           </div>
-          {loginError && (
-            <div className="alert alert-danger mt-3">{loginError}</div>
-          )}
+          {loginError && <div className="error">{loginError}</div>}
+          {successMessage && <div className="succes">{successMessage}</div>}
           <p className="redirect">
             ¿No tienes cuenta?{" "}
             <a href="#" onClick={onRegistrarse}>

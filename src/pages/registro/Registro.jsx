@@ -26,7 +26,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
     e.preventDefault();
 
     if (!validator.isEmail(email)) {
-      setRegistrationError("Email is not valid");
+      setRegistrationError("El email no es válido.");
       return;
     }
 
@@ -67,16 +67,16 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
 
       switch (error.code) {
         case "auth/email-already-in-use":
-          errorMessage = "Email is already in use";
+          errorMessage = "El mail ya está en uso.";
           break;
         case "auth/invalid-email":
-          errorMessage = "The email is not valid";
+          errorMessage = "El email no es válido.";
           break;
         case "auth/weak-password":
-          errorMessage = "The password must be at least 6 characters";
+          errorMessage = "La contraseña debe ser de al menos 6 caracteres.";
           break;
         default:
-          errorMessage = "Error registering user. Try it again later.";
+          errorMessage = "Error al registrar el usuario, pruebe de nuevo.";
       }
 
       setRegistrationError(errorMessage);
@@ -142,14 +142,8 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
               <option value="niño/a">Niño/a</option>
             </select>
           </div>
-          {registrationSuccess && (
-            <div className="alert alert-success mt-3">
-              Registro exitoso. ¡Bienvenido!
-            </div>
-          )}
-          {registrationError && (
-            <div className="alert alert-danger mt-3">{registrationError}</div>
-          )}
+          {registrationError && <div className="error">{registrationError}</div>}
+          {registrationSuccess && <div className="succes">Registro exitoso. ¡Bienvenido!</div>}
           <p className="redirect">
             ¿Ya tienes cuenta?{" "}
             <a href="#" onClick={onIniciarSesion}>

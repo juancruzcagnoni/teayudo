@@ -56,10 +56,14 @@ a {
 
 .success {
   color: green;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 .error {
   color: red;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 .backButton {
@@ -138,6 +142,7 @@ a {
 .camposContainer {
   display: flex;
   flex-direction: column;
+  /* margin: 0 0.4rem; */
   margin-bottom: 1rem;
   width: auto;
 }
