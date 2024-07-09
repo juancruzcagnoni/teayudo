@@ -23,6 +23,7 @@ const Comunicar = () => {
   const [loading, setLoading] = useState(true);
   const [mostrarFavoritos, setMostrarFavoritos] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [favoritos, setFavoritos] = useState([]);
 
   const db = getFirestore(app);
   const auth = getAuth(app);
@@ -43,6 +44,7 @@ const Comunicar = () => {
         const botonesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          favorito: favoritos.includes(doc.id)
         }));
         setBotones(botonesData);
 
@@ -69,7 +71,7 @@ const Comunicar = () => {
     };
 
     fetchBotones();
-  }, [db]);
+  }, [db, favoritos]);
 
   useEffect(() => {
     if (!user) return;
@@ -80,15 +82,7 @@ const Comunicar = () => {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           const userFavs = userData.botonesFavoritos || [];
-          
-          const updatedBotones = botones.map((b) => {
-            if (userFavs.includes(b.id)) {
-              return { ...b, favorito: true };
-            }
-            return { ...b, favorito: false };
-          });
-
-          setBotones(updatedBotones);
+          setFavoritos(userFavs);
         }
       } catch (error) {
         console.error("Error al obtener los favoritos:", error);
@@ -96,7 +90,7 @@ const Comunicar = () => {
     };
 
     fetchFavoritos();
-  }, [user, db, botones]);
+  }, [user, db]);
 
   const handleButtonClick = (sonidoUrl) => {
     const audio = new Audio(sonidoUrl);
@@ -126,14 +120,7 @@ const Comunicar = () => {
 
         await updateDoc(userDocRef, { botonesFavoritos: favoritos });
 
-        const updatedBotones = botones.map((b) => {
-          if (favoritos.includes(b.id)) {
-            return { ...b, favorito: true };
-          }
-          return { ...b, favorito: false };
-        });
-
-        setBotones(updatedBotones);
+        setFavoritos(favoritos);
       }
     } catch (error) {
       console.error("Error al actualizar favorito:", error);
