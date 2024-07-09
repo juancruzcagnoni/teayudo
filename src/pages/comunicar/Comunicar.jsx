@@ -5,7 +5,9 @@ import {
   getDocs,
   doc,
   updateDoc,
+  getDoc
 } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import app from "../../js/config";
 import styles from "./Comunicar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +25,8 @@ const Comunicar = () => {
   const [showModal, setShowModal] = useState(false);
 
   const db = getFirestore(app);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
 
   const openModal = () => {
     setShowModal(true);
@@ -67,6 +71,33 @@ const Comunicar = () => {
     fetchBotones();
   }, [db]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchFavoritos = async () => {
+      try {
+        const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const userFavs = userData.botonesFavoritos || [];
+          
+          const updatedBotones = botones.map((b) => {
+            if (userFavs.includes(b.id)) {
+              return { ...b, favorito: true };
+            }
+            return { ...b, favorito: false };
+          });
+
+          setBotones(updatedBotones);
+        }
+      } catch (error) {
+        console.error("Error al obtener los favoritos:", error);
+      }
+    };
+
+    fetchFavoritos();
+  }, [user, db, botones]);
+
   const handleButtonClick = (sonidoUrl) => {
     const audio = new Audio(sonidoUrl);
     audio.play();
@@ -77,20 +108,33 @@ const Comunicar = () => {
   };
 
   const toggleFavorito = async (botonId) => {
+    if (!user) return;
+
     try {
-      const botonRef = doc(db, "botones", botonId);
-      const boton = botones.find((b) => b.id === botonId);
-      const updatedFavorito = !boton.favorito;
-      await updateDoc(botonRef, { favorito: updatedFavorito });
+      const userDocRef = doc(db, "usuarios", user.uid);
+      const userDoc = await getDoc(userDocRef);
 
-      const updatedBotones = botones.map((b) => {
-        if (b.id === botonId) {
-          return { ...b, favorito: updatedFavorito };
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        let favoritos = userData.botonesFavoritos || [];
+
+        if (favoritos.includes(botonId)) {
+          favoritos = favoritos.filter((id) => id !== botonId);
+        } else {
+          favoritos.push(botonId);
         }
-        return b;
-      });
 
-      setBotones(updatedBotones);
+        await updateDoc(userDocRef, { botonesFavoritos: favoritos });
+
+        const updatedBotones = botones.map((b) => {
+          if (favoritos.includes(b.id)) {
+            return { ...b, favorito: true };
+          }
+          return { ...b, favorito: false };
+        });
+
+        setBotones(updatedBotones);
+      }
     } catch (error) {
       console.error("Error al actualizar favorito:", error);
     }
