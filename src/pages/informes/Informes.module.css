@@ -33,10 +33,10 @@ textarea {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #f5b80f5a;
+  background-color: var(--secondary-color);
   color: var(--primary-color);
   border: none;
-  padding: 10px;
+  padding: 0.5rem;
   cursor: pointer;
   border-radius: 50%;
   font-size: 1.5rem;
