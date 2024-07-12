@@ -154,7 +154,7 @@ const Perfil = () => {
         </div>
 
         <div className={styles.linksCerrarSesion} onClick={handleSignOut}>
-          <a>Cerrar Sesión</a>
+          <a>Cerrar sesión</a>
         </div>
       </div>
 

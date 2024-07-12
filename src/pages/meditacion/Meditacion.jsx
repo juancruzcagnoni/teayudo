@@ -113,7 +113,7 @@ const Meditacion = () => {
       <div className={styles.meditacionHeader}>
         <div>
           <h1>Meditación</h1>
-          <p>Buen momento para relajarnos! Elige la que más te guste.</p>
+          <p>Buen momento para relajarnos! Elegí la que más te guste.</p>
         </div>
         <div className={styles.meditacionImagenContainer}>
           <img src={MeditacionImagen} alt="" />

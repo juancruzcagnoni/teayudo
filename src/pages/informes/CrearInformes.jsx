@@ -206,7 +206,7 @@ const CrearInforme = () => {
           {error && <p className="error">{error}</p>}
           {successMessage && <p className="success">{successMessage}</p>}
           <button type="submit" className={styles.crear}>
-            Crear Informe
+            Crear informe
           </button>
         </form>
       </div>

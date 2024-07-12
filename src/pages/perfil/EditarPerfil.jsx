@@ -251,7 +251,7 @@ const EditarPerfil = () => {
             </p>
           )}
           <button type="submit" className={styles.actualizar}>
-            Actualizar Perfil
+            Actualizar perfil
           </button>
         </form>
       </div>
