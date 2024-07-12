@@ -5,7 +5,7 @@ import {
   getDocs,
   doc,
   updateDoc,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import app from "../../js/config";
@@ -44,7 +44,7 @@ const Comunicar = () => {
         const botonesData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          favorito: favoritos.includes(doc.id)
+          favorito: favoritos.includes(doc.id),
         }));
         setBotones(botonesData);
 
@@ -180,6 +180,7 @@ const Comunicar = () => {
             className={styles.favoritoMostrar}
             onClick={mostrarFavoritosHandler}
           >
+            <p>Favoritos</p>
             <FontAwesomeIcon
               icon={faStar}
               style={{ width: "20px", height: "20px" }}

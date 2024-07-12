@@ -102,13 +102,22 @@
 .favoritoMostrar {
   background-color: var(--secondaryv2-color);
   border: none;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
   color: var(--primary-color);
   position: block;
   right: 15px;
   top: 35px;
   width: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.favoritoMostrar p{
+  margin: 0;
+  margin-right: 0.5rem;
 }
 
 @media (min-width: 768px) {
