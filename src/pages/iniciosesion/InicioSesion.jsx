@@ -72,8 +72,7 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           errorMessage = "Contraseña incorrecta. Verifique su contraseña.";
           break;
         default:
-          errorMessage =
-            "Error al iniciar sesión. Revise sus credenciales.";
+          errorMessage = "Error al iniciar sesión. Revise sus credenciales.";
       }
 
       setLoginError(errorMessage);
@@ -95,15 +94,17 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           <div className="camposContainer">
             <label>Email</label>
             <input
+              placeholder="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="camposContainer">
             <label>Contraseña</label>
             <input
+              placeholder="Contraseña"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -113,9 +114,9 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           {loginError && <div className="error">{loginError}</div>}
           {successMessage && <div className="succes">{successMessage}</div>}
           <p className="redirect">
-            ¿No tienes cuenta?{" "}
+            ¿No tenes cuenta?{" "}
             <a href="#" onClick={onRegistrarse}>
-              Regístrate
+              Registrate.
             </a>
           </p>
         </div>

@@ -9,7 +9,11 @@ import {
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import {
-  getStorage, ref, uploadBytes, getDownloadURL, deleteObject,
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -87,7 +91,9 @@ const EditarPerfil = () => {
       if (newEmail && newEmail !== user.email) {
         await reauthenticateWithCredential(user, credential);
         await sendEmailVerification(user);
-        setMessage("Se ha enviado un correo de verificación. Por favor verifica tu nuevo correo electrónico.");
+        setMessage(
+          "Se ha enviado un correo de verificación. Por favor verifica tu nuevo correo electrónico."
+        );
         setUpdating(false);
         return;
       }
@@ -122,7 +128,9 @@ const EditarPerfil = () => {
       }, 3000);
     } catch (error) {
       if (error.code === "auth/requires-recent-login") {
-        setMessage("Por favor, vuelva a iniciar sesión para realizar esta operación.");
+        setMessage(
+          "Por favor, vuelva a iniciar sesión para realizar esta operación."
+        );
       } else {
         console.error("Error al actualizar perfil:", error);
         setMessage(`Error al actualizar perfil: ${error.message}`);
@@ -187,7 +195,7 @@ const EditarPerfil = () => {
         <a onClick={handleBack} className="backButton">
           <FontAwesomeIcon icon={faArrowLeft} />
         </a>
-        <h1 className="titleSection">Editar Perfil</h1>
+        <h1 className="titleSection">Editar perfil</h1>
         <form onSubmit={handleUpdateProfile} className={styles.form}>
           <div className={styles.imageContainerEdit}>
             {profileImageUrl && (
@@ -216,6 +224,7 @@ const EditarPerfil = () => {
           <div className="camposContainer">
             <label>Nombre</label>
             <input
+              placeholder="Nombre"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -224,6 +233,7 @@ const EditarPerfil = () => {
           <div className="camposContainer">
             <label>Apellido</label>
             <input
+              placeholder="Apellido"
               type="text"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
@@ -232,6 +242,7 @@ const EditarPerfil = () => {
           <div className="camposContainer">
             <label>Contraseña actual</label>
             <input
+              placeholder="Contraseña actual"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -240,6 +251,7 @@ const EditarPerfil = () => {
           <div className="camposContainer">
             <label>Contraseña nueva</label>
             <input
+              placeholder="Contraseña nueva"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -257,14 +269,14 @@ const EditarPerfil = () => {
       </div>
       {showConfirmModal && (
         <ModalConfirmacion
-          mensaje="¿Estás seguro de que quieres actualizar tu perfil?"
+          mensaje="¿Estás seguro de que querés actualizar tu perfil?"
           onConfirm={handleConfirmUpdate}
           onCancel={handleCancelUpdate}
         />
       )}
       {showDeleteImageModal && (
         <ModalConfirmacion
-          mensaje="¿Estás seguro de que quieres eliminar la foto de perfil?"
+          mensaje="¿Estás seguro de que querés eliminar la foto de perfil?"
           onConfirm={handleConfirmRemoveProfileImage}
           onCancel={handleCancelRemoveProfileImage}
         />

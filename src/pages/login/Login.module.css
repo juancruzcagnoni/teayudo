@@ -32,7 +32,11 @@
 
 .spanTitle {
   color: var(--secondary-color);
-  font-weight: 600;
+  /* font-weight: 600; */
+}
+
+.spanTitle span {
+  font-weight: 800;
 }
 
 .loginText p {

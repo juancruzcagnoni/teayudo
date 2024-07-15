@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import app from "../../js/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import AsyncSelect from 'react-select/async';
+import AsyncSelect from "react-select/async";
 import styles from "./Informes.module.css";
 import ModalConfirmacion from "../../components/modal/Modal";
 
@@ -81,7 +88,11 @@ const CrearInforme = () => {
   };
 
   const loadOptions = async (inputValue) => {
-    const q = query(collection(db, "usuarios"), where("email", ">=", inputValue), where("email", "<=", inputValue + '\uf8ff'));
+    const q = query(
+      collection(db, "usuarios"),
+      where("email", ">=", inputValue),
+      where("email", "<=", inputValue + "\uf8ff")
+    );
     const querySnapshot = await getDocs(q);
     const options = [];
     querySnapshot.forEach((doc) => {
@@ -97,7 +108,7 @@ const CrearInforme = () => {
         <a onClick={handleBack} className="backButton">
           <FontAwesomeIcon icon={faArrowLeft} />
         </a>
-        <h2 className="titleSection">Crear Informe</h2>
+        <h2 className="titleSection">Crear informe</h2>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -108,14 +119,15 @@ const CrearInforme = () => {
           <div className="camposContainer">
             <label>Título</label>
             <input
+              placeholder="Título"
               type="text"
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
               required
-            />
+              />
           </div>
           <div className={styles.camposFlex}>
-            <div className="camposContainer" style={{ width: '60%' }}>
+            <div className="camposContainer" style={{ width: "60%" }}>
               <label>Niño/a</label>
               <AsyncSelect
                 cacheOptions
@@ -127,81 +139,96 @@ const CrearInforme = () => {
                 required
               />
             </div>
-            <div className="camposContainer" style={{ width: '40%' , marginLeft: '0.5rem' }}>
+            <div
+              className="camposContainer"
+              style={{ width: "40%", marginLeft: "0.5rem" }}
+            >
               <label>Fecha</label>
               <input
+                placeholder="Fecha"
                 type="date"
                 value={fecha}
                 onChange={(e) => setFecha(e.target.value)}
                 required
-              />
+                />
             </div>
           </div>
           <div className="camposContainer">
             <label>Diagnóstico</label>
             <input
+              placeholder="Diagnóstico"
               type="text"
               value={diagnostico}
               onChange={(e) => setDiagnostico(e.target.value)}
-            />
+              />
           </div>
           <div className={styles.camposFlex}>
-            <div className="camposContainer" style={{ width: '60%' }}>
+            <div className="camposContainer" style={{ width: "60%" }}>
               <label>Escuela</label>
               <input
+                placeholder="Escuela"
                 type="text"
                 value={escuela}
                 onChange={(e) => setEscuela(e.target.value)}
-              />
+                />
             </div>
-            <div className="camposContainer" style={{ width: '40%', marginLeft: '0.5rem' }}>
+            <div
+              className="camposContainer"
+              style={{ width: "40%", marginLeft: "0.5rem" }}
+              >
               <label>Grado/Año</label>
               <input
+                placeholder="Grado/Año"
                 type="text"
                 value={grado}
                 onChange={(e) => setGrado(e.target.value)}
-              />
+                />
             </div>
           </div>
           <div className="camposContainer">
             <label>Objetivos</label>
             <textarea
+              placeholder="Objetivos"
               value={objetivos}
               onChange={(e) => setObjetivos(e.target.value)}
-              style={{ height: '50px' }}
-            ></textarea>
+              style={{ height: "50px" }}
+              ></textarea>
           </div>
           <div className="camposContainer">
-            <label>Fortalezas en el Desempeño</label>
+            <label>Fortalezas en el desempeño</label>
             <textarea
+              placeholder="Fortalezas en el desempeño"
               value={fortalezas}
               onChange={(e) => setFortalezas(e.target.value)}
-              style={{ height: '50px' }}
-            ></textarea>
+              style={{ height: "50px" }}
+              ></textarea>
           </div>
           <div className="camposContainer">
-            <label>Desafíos en el Desempeño</label>
+            <label>Desafíos en el desempeño</label>
             <textarea
+              placeholder="Desafíos en el desempeño"
               value={desafios}
               onChange={(e) => setDesafios(e.target.value)}
-              style={{ height: '50px' }}
-            ></textarea>
+              style={{ height: "50px" }}
+              ></textarea>
           </div>
           <div className="camposContainer">
             <label>Intervenciones</label>
             <textarea
+              placeholder="Intervenciones"
               value={intervenciones}
               onChange={(e) => setIntervenciones(e.target.value)}
-              style={{ height: '50px' }}
-            ></textarea>
+              style={{ height: "50px" }}
+              ></textarea>
           </div>
           <div className="camposContainer">
             <label>Observaciones</label>
             <textarea
+              placeholder="Observaciones"
               value={observaciones}
               onChange={(e) => setObservaciones(e.target.value)}
               required
-            ></textarea>
+              ></textarea>
           </div>
           {error && <p className="error">{error}</p>}
           {successMessage && <p className="success">{successMessage}</p>}

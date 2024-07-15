@@ -193,11 +193,11 @@ const VerInforme = () => {
               <td>{informe.objetivos}</td>
             </tr>
             <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Fortalezas en el Desempeño</td>
+              <td className={styles.tableHeader}>Fortalezas en el desempeño</td>
               <td>{informe.fortalezas}</td>
             </tr>
             <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Desafíos en el Desempeño</td>
+              <td className={styles.tableHeader}>Desafíos en el desempeño</td>
               <td>{informe.desafios}</td>
             </tr>
             <tr className={styles.columnInforme}>
@@ -248,7 +248,7 @@ const VerInforme = () => {
 
       {showDownloadModal && (
         <ModalConfirmacion
-          mensaje="¿Quieres descargar este informe en formato PDF?"
+          mensaje="¿Querés descargar este informe en formato PDF?"
           onConfirm={confirmDownloadPDF}
           onCancel={closeDownloadModal}
         />

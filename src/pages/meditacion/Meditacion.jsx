@@ -6,7 +6,7 @@ import styles from "./Meditacion.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ModalInfo from "../../components/modal-info/ModalInfo";
-import TextoAnimado from "../../components/texto-meditacion/TextoAnimado"; // Importar el componente
+import TextoAnimado from "../../components/texto-meditacion/TextoAnimado"; 
 import MeditacionImagen from "../../assets/meditation-svgrepo-com.svg";
 
 const Meditacion = () => {
@@ -16,7 +16,7 @@ const Meditacion = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAudioIndex, setCurrentAudioIndex] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [showTextoAnimado, setShowTextoAnimado] = useState(false); // Estado para mostrar el texto animado
+  const [showTextoAnimado, setShowTextoAnimado] = useState(false); 
   const db = getFirestore(app);
 
   const openModal = () => {
@@ -43,7 +43,6 @@ const Meditacion = () => {
     fetchMeditaciones();
   }, [db]);
 
-  // Manejar el efecto de limpieza al desmontar el componente
   useEffect(() => {
     return () => {
       if (currentAudio) {
@@ -60,10 +59,10 @@ const Meditacion = () => {
     if (currentAudio && currentAudioIndex === index) {
       if (isPlaying) {
         currentAudio.pause();
-        setShowTextoAnimado(false); // Ocultar texto animado al pausar
+        setShowTextoAnimado(false); 
       } else {
         currentAudio.play();
-        setShowTextoAnimado(true); // Mostrar texto animado al reproducir
+        setShowTextoAnimado(true); 
       }
       setIsPlaying(!isPlaying);
     } else {
@@ -75,7 +74,7 @@ const Meditacion = () => {
       setCurrentAudioIndex(index);
       audio.play();
       setIsPlaying(true);
-      setShowTextoAnimado(true); // Mostrar texto animado al comenzar la reproducción
+      setShowTextoAnimado(true); 
     }
   };
 
@@ -106,14 +105,14 @@ const Meditacion = () => {
       <ModalInfo
         show={showModal}
         onClose={closeModal}
-        content="Esta es la sección de meditación, donde puedes relajarte con sonidos relajantes."
+        content="Esta es la sección de meditación, donde podes relajarte con sonidos relajantes."
       />
       {/* <TextoAnimado show={showTextoAnimado} />{" "} */}
       {/* Mostrar el componente TextoAnimado */}
       <div className={styles.meditacionHeader}>
         <div>
           <h1>Meditación</h1>
-          <p>Buen momento para relajarnos! Elegí la que más te guste.</p>
+          <p>Buen momento para relajarnos. Elegí la que más te guste.</p>
         </div>
         <div className={styles.meditacionImagenContainer}>
           <img src={MeditacionImagen} alt="" />

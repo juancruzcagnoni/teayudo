@@ -95,43 +95,47 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
         <h2 className="titleSection">Crea tu cuenta</h2>
         <div className="middleSection">
           <div className="camposContainer">
-            <label>Nombre</label>
+            <label>Nombre *</label>
             <input
+              placeholder="Nombre"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="camposContainer">
-            <label>Apellido</label>
+            <label>Apellido *</label>
             <input
+              placeholder="Apellido"
               type="text"
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="camposContainer">
-            <label>Email</label>
+            <label>Email *</label>
             <input
+              placeholder="Email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="camposContainer">
-            <label>Contraseña</label>
+            <label>Contraseña *</label>
             <input
+              placeholder="Contraseña"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="camposContainer">
-            <label>Tipo de Usuario</label>
+            <label>Tipo de Usuario *</label>
             <select
               value={userType}
               onChange={(e) => setUserType(e.target.value)}

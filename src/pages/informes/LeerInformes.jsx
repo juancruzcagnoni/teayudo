@@ -22,6 +22,7 @@ import {
 import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import { Oval } from "react-loader-spinner";
 import styles from "./Informes.module.css";
+import { format } from "date-fns";
 
 const LeerInformes = () => {
   const [informes, setInformes] = useState([]);
@@ -83,14 +84,30 @@ const LeerInformes = () => {
         );
 
         const allInformes = fetchedInformes.concat(fetchedInformesEvaluado);
-        setInformes(allInformes);
+        
+        // Fetch creator emails if user is a child
+        if (userType === "niño/a") {
+          const informesWithCreatorEmails = await Promise.all(
+            allInformes.map(async (informe) => {
+              const creatorDocRef = doc(db, "usuarios", informe.userId);
+              const creatorDocSnapshot = await getDoc(creatorDocRef);
+              const creatorEmail = creatorDocSnapshot.exists()
+                ? creatorDocSnapshot.data().email
+                : "Desconocido";
+              return { ...informe, creatorEmail };
+            })
+          );
+          setInformes(informesWithCreatorEmails);
+        } else {
+          setInformes(allInformes);
+        }
 
         setLoading(false);
       }
     };
 
     fetchInformes();
-  }, [auth, db]);
+  }, [auth, db, userType]);
 
   const handleInformeClick = (informeId) => {
     navigate(`/ver-informe/${informeId}`);
@@ -103,11 +120,7 @@ const LeerInformes = () => {
   const ordenarInformesPorFecha = (a, b) => {
     const dateA = new Date(a.fecha);
     const dateB = new Date(b.fecha);
-    if (ordenAscendente) {
-      return dateA - dateB;
-    } else {
-      return dateB - dateA;
-    }
+    return ordenAscendente ? dateA - dateB : dateB - dateA;
   };
 
   const informesOrdenados = [...informes].sort(ordenarInformesPorFecha);
@@ -142,7 +155,7 @@ const LeerInformes = () => {
             <FontAwesomeIcon icon={faPlus} />
           </div>
         )}
-        <h2 className="titleSection">Mis Informes</h2>
+        <h2 className="titleSection">Mis informes</h2>
         {informes.length > 0 ? (
           <div>
             <div className={styles.ordenButton} onClick={toggleOrden}>
@@ -167,12 +180,15 @@ const LeerInformes = () => {
                       />
                       <div>
                         <h3>{informe.titulo}</h3>
-                        {userType !== "niño/a" && (
+                        {userType === "niño/a" ? (
+                          <p>{informe.creatorEmail}</p>
+                        ) : (
                           <p>{informe.personaEvaluada}</p>
                         )}
                       </div>
                     </div>
-                    <div>
+                    <div className={styles.informeRight}>
+                      <p>{format(new Date(informe.fecha), "dd/MM/yyyy")}</p>
                       <span className={styles.iconChevron}>
                         <FontAwesomeIcon icon={faChevronRight} />
                       </span>

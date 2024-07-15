@@ -34,14 +34,14 @@ const Login = () => {
           <img src={logo} alt="Logo" className={styles.loginLogo} />
           <div className={styles.bottom}>
             <div className={styles.loginText}>
-              <h1>Bienvenido a <span className={styles.spanTitle}>TEAYUDO</span></h1>
+              <h1>Bienvenido a <span className={styles.spanTitle}><span>TEA</span>YUDO</span></h1>
               <p>
                 Sumate con nosotros para impactar en la vida de niños con 
-                <span className={styles.spanText}> Trastornos en el Espectro Autista</span>
+                <span className={styles.spanText}> Trastornos en el Espectro Autista.</span>
               </p>
             </div>
             <div className={styles.loginButtons}>
-              <button onClick={handleClickIniciarSesion}>Iniciar Sesión</button>
+              <button onClick={handleClickIniciarSesion}>Iniciar sesión</button>
               <button onClick={handleClickRegistrarse} className={styles.registro}>Registrarse</button>
             </div>
           </div>
