@@ -4,19 +4,22 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import validator from "https://cdn.skypack.dev/validator";
 import styles from "./Registro.module.css";
 
 const Registro = ({ onVolverAtras, onIniciarSesion }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [apellido, setApellido] = useState(""); // Estado para el apellido
   const [profileImage, setProfileImage] = useState(null);
   const [userType, setUserType] = useState(""); // Estado para el tipo de usuario
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [registrationError, setRegistrationError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -30,17 +33,18 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setRegistrationError("Las contraseñas no coinciden.");
+      return;
+    }
+
     if (!userType) {
-      setRegistrationError("Por favor, selecciona si eres Ayudante o Niño");
+      setRegistrationError("Por favor, selecciona si eres Profesional o Niño/a.");
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       const userDocRef = doc(db, "usuarios", user.uid);
@@ -67,7 +71,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
 
       switch (error.code) {
         case "auth/email-already-in-use":
-          errorMessage = "El mail ya está en uso.";
+          errorMessage = "El email ya está en uso.";
           break;
         case "auth/invalid-email":
           errorMessage = "El email no es válido.";
@@ -82,6 +86,14 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
       setRegistrationError(errorMessage);
       setRegistrationSuccess(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
 
   return (
@@ -102,7 +114,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              />
+            />
           </div>
           <div className="camposContainer">
             <label>Apellido *</label>
@@ -112,7 +124,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
               value={apellido}
               onChange={(e) => setApellido(e.target.value)}
               required
-              />
+            />
           </div>
           <div className="camposContainer">
             <label>Email *</label>
@@ -122,17 +134,47 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              />
+            />
           </div>
           <div className="camposContainer">
             <label>Contraseña *</label>
-            <input
-              placeholder="Contraseña"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+            <div className="passwordContainer">
+              <input
+                placeholder="Contraseña"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="passwordInput"
               />
+              <a
+                type="button"
+                className="togglePasswordButton"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </a>
+            </div>
+          </div>
+          <div className="camposContainer">
+            <label>Confirmar Contraseña *</label>
+            <div className="passwordContainer">
+              <input
+                placeholder="Confirmar Contraseña"
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="passwordInput"
+              />
+              <a
+                type="button"
+                className="togglePasswordButton"
+                onClick={toggleConfirmPasswordVisibility}
+              >
+                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+              </a>
+            </div>
           </div>
           <div className="camposContainer">
             <label>Tipo de Usuario *</label>
@@ -147,7 +189,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
             </select>
           </div>
           {registrationError && <div className="error">{registrationError}</div>}
-          {registrationSuccess && <div className="succes">Registro exitoso. ¡Bienvenido!</div>}
+          {registrationSuccess && <div className="success">Registro exitoso. ¡Bienvenido!</div>}
           <p className="redirect">
             ¿Ya tienes cuenta?{" "}
             <a href="#" onClick={onIniciarSesion}>

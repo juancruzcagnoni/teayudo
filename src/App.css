@@ -36,7 +36,6 @@ button {
 input,
 select,
 textarea {
-  border: 1px solid var(--text-color);
   padding: 0.6rem 0.8rem;
   border-radius: 5px;
   background-color: var(--background-color);
@@ -45,6 +44,28 @@ textarea {
 
 a {
   cursor: pointer;
+}
+
+.passwordContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid var(--grey-color);
+  background-color: var(--background-color);
+  border-radius: 5px;
+}
+
+.passwordInput {
+  flex-grow: 1;
+  width: 100%;
+  border: none;
+}
+
+.togglePasswordButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.5rem;
 }
 
 .titleSection {
@@ -142,9 +163,8 @@ a {
 .camposContainer {
   display: flex;
   flex-direction: column;
-  /* margin: 0 0.4rem; */
   margin-bottom: 1rem;
-  width: auto;
+  width: 100%;
 }
 
 .camposContainer label {

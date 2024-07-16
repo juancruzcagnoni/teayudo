@@ -16,7 +16,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faTimes, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import app from "../../js/config";
 import { useNavigate } from "react-router-dom";
 import styles from "./EditarPerfil.module.css";
@@ -39,6 +39,8 @@ const EditarPerfil = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeleteImageModal, setShowDeleteImageModal] = useState(false);
   const [removeProfileImage, setRemoveProfileImage] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña actual
+  const [showNewPassword, setShowNewPassword] = useState(false); // Estado para mostrar/ocultar la nueva contraseña
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
@@ -170,24 +172,13 @@ const EditarPerfil = () => {
     setShowDeleteImageModal(false);
   };
 
-  if (loading || updating) {
-    return (
-      <div className="loaderContainer">
-        <Oval
-          height={80}
-          width={80}
-          color="#912C8C"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-          ariaLabel="oval-loading"
-          secondaryColor="#F5B60F"
-          strokeWidth={5}
-          strokeWidthSecondary={5}
-        />
-      </div>
-    );
-  }
+  const togglePasswordVisibility = (type) => {
+    if (type === "current") {
+      setShowPassword((prevShowPassword) => !prevShowPassword);
+    } else if (type === "new") {
+      setShowNewPassword((prevShowNewPassword) => !prevShowNewPassword);
+    }
+  };
 
   return (
     <div className="padding-page">
@@ -241,21 +232,39 @@ const EditarPerfil = () => {
           </div>
           <div className="camposContainer">
             <label>Contraseña actual</label>
-            <input
-              placeholder="Contraseña actual"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="passwordContainer">
+              <input
+                placeholder="Contraseña actual"
+                type={showPassword ? "text" : "password"} // Mostrar contraseña según el estado
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="passwordInput"
+              />
+              <a
+                className={"togglePasswordButton"}
+                onClick={() => togglePasswordVisibility("current")} // Alternar visibilidad de la contraseña actual
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </a>
+            </div>
           </div>
           <div className="camposContainer">
             <label>Contraseña nueva</label>
-            <input
-              placeholder="Contraseña nueva"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+            <div className="passwordContainer">
+              <input
+                placeholder="Contraseña nueva"
+                type={showNewPassword ? "text" : "password"} // Mostrar contraseña según el estado
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="passwordInput"
+              />
+              <a
+                className={"togglePasswordButton"}
+                onClick={() => togglePasswordVisibility("new")} // Alternar visibilidad de la nueva contraseña
+              >
+                <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
+              </a>
+            </div>
           </div>
           {message && (
             <p className={message.includes("Error") ? "error" : "success"}>

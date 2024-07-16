@@ -7,7 +7,7 @@ import {
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import validator from "https://cdn.skypack.dev/validator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import app from "../../js/config";
 import styles from "./InicioSesion.module.css";
 
@@ -16,6 +16,7 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -23,7 +24,6 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Limpiar mensajes anteriores
     setLoginError("");
     setSuccessMessage("");
 
@@ -38,11 +38,7 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("Inicio de sesión exitoso:", user);
 
@@ -65,8 +61,7 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
 
       switch (error.code) {
         case "auth/user-not-found":
-          errorMessage =
-            "Usuario no encontrado. Verifique su email y contraseña.";
+          errorMessage = "Usuario no encontrado. Verifique su email y contraseña.";
           break;
         case "auth/invalid-password":
           errorMessage = "Contraseña incorrecta. Verifique su contraseña.";
@@ -77,6 +72,10 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
 
       setLoginError(errorMessage);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
@@ -103,13 +102,23 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           </div>
           <div className="camposContainer">
             <label>Contraseña</label>
-            <input
-              placeholder="Contraseña"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="passwordContainer">
+              <input
+                placeholder="Contraseña"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="passwordInput"
+              />
+              <a
+                type="button"
+                className="togglePasswordButton"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </a>
+            </div>
           </div>
           {loginError && <div className="error">{loginError}</div>}
           {successMessage && <div className="succes">{successMessage}</div>}
