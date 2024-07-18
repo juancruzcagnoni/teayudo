@@ -28,13 +28,13 @@
   font-size: 1.5rem;
 }
 
-.meditacionImagenContainer{
+.meditacionImagenContainer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.meditacionImagenContainer img{
+.meditacionImagenContainer img {
   width: 80px;
   object-fit: cover;
 }
@@ -81,6 +81,18 @@
   width: 100%;
   max-width: 40px;
   height: auto;
+}
+
+.duracionContainer{
+  display: flex;
+  justify-content: right;
+}
+
+.duracion {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  text-align: right;
+  width: auto;
 }
 
 .playPauseButton {

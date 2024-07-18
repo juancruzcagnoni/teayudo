@@ -7,6 +7,7 @@ import Registro from "./pages/registro/Registro";
 import Comunicar from "./pages/comunicar/Comunicar";
 import Perfil from "./pages/perfil/Perfil";
 import Meditacion from "./pages/meditacion/Meditacion";
+import MeditacionDetalle from "./pages/meditacion/MeditacionDetalle";
 import Navbar from "./components/nav/Nav";
 import CrearInforme from "./pages/informes/CrearInformes";
 import LeerInforme from "./pages/informes/LeerInformes";
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/registro" element={<Registro />} />
         <Route path="/comunicar" element={user ? <Comunicar /> : <Login />} />
         <Route path="/meditacion" element={user ? <Meditacion /> : <Login />} />
+        <Route path="/meditacion/:id" element={<MeditacionDetalle />} />
         <Route path="/perfil" element={user ? <Perfil /> : <Login />} />
         <Route
           path="/editar-perfil"

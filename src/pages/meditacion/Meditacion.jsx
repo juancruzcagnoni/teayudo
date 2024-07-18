@@ -3,21 +3,19 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 import app from "../../js/config";
 import { Oval } from "react-loader-spinner";
 import styles from "./Meditacion.module.css";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ModalInfo from "../../components/modal-info/ModalInfo";
-import TextoAnimado from "../../components/texto-meditacion/TextoAnimado"; 
 import MeditacionImagen from "../../assets/meditation-svgrepo-com.svg";
 
 const Meditacion = () => {
   const [meditaciones, setMeditaciones] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentAudio, setCurrentAudio] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentAudioIndex, setCurrentAudioIndex] = useState(null);
+  const [duraciones, setDuraciones] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [showTextoAnimado, setShowTextoAnimado] = useState(false); 
   const db = getFirestore(app);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setShowModal(true);
@@ -34,6 +32,7 @@ const Meditacion = () => {
         const meditacionesData = querySnapshot.docs.map((doc) => doc.data());
         setMeditaciones(meditacionesData);
         setLoading(false);
+        calculateDurations(meditacionesData);
       } catch (error) {
         console.error("Error al obtener las meditaciones:", error);
         setLoading(false);
@@ -43,39 +42,19 @@ const Meditacion = () => {
     fetchMeditaciones();
   }, [db]);
 
-  useEffect(() => {
-    return () => {
-      if (currentAudio) {
-        currentAudio.pause();
-        setCurrentAudio(null);
-        setIsPlaying(false);
-        setCurrentAudioIndex(null);
-        setShowTextoAnimado(false);
-      }
-    };
-  }, [currentAudio]);
-
-  const handleButtonClick = (sonidoUrl, index) => {
-    if (currentAudio && currentAudioIndex === index) {
-      if (isPlaying) {
-        currentAudio.pause();
-        setShowTextoAnimado(false); 
-      } else {
-        currentAudio.play();
-        setShowTextoAnimado(true); 
-      }
-      setIsPlaying(!isPlaying);
-    } else {
-      if (currentAudio) {
-        currentAudio.pause();
-      }
-      const audio = new Audio(sonidoUrl);
-      setCurrentAudio(audio);
-      setCurrentAudioIndex(index);
-      audio.play();
-      setIsPlaying(true);
-      setShowTextoAnimado(true); 
-    }
+  const calculateDurations = (meditacionesData) => {
+    meditacionesData.forEach((meditacion, index) => {
+      const audio = new Audio(meditacion.sonido);
+      audio.addEventListener("loadedmetadata", () => {
+        setDuraciones((prevDuraciones) => ({
+          ...prevDuraciones,
+          [index]:
+            Math.floor(audio.duration / 60) +
+            ":" +
+            ("0" + Math.floor(audio.duration % 60)).slice(-2), // Convertir a minutos y segundos
+        }));
+      });
+    });
   };
 
   if (loading) {
@@ -107,8 +86,6 @@ const Meditacion = () => {
         onClose={closeModal}
         content="Esta es la sección de meditación, donde podes relajarte con sonidos relajantes."
       />
-      {/* <TextoAnimado show={showTextoAnimado} />{" "} */}
-      {/* Mostrar el componente TextoAnimado */}
       <div className={styles.meditacionHeader}>
         <div>
           <h1>Meditación</h1>
@@ -122,7 +99,11 @@ const Meditacion = () => {
         <div className={styles.container}>
           <div>
             {meditaciones.map((meditacion, index) => (
-              <div key={index} className={styles.meditacionItem}>
+              <div
+                key={index}
+                className={styles.meditacionItem}
+                onClick={() => navigate(`/meditacion/${index}`)}
+              >
                 <div className={styles.meditacionItemLeft}>
                   <div>
                     <img
@@ -136,20 +117,9 @@ const Meditacion = () => {
                       {meditacion.titulo}
                     </p>
                   </div>
-                </div>
-                <div>
-                  <a
-                    onClick={() => handleButtonClick(meditacion.sonido, index)}
-                    className={styles.playPauseButton}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isPlaying && currentAudioIndex === index
-                          ? faPause
-                          : faPlay
-                      }
-                    />
-                  </a>
+                  <div className={styles.duracionContainer}>
+                    <p className={styles.duracion}>{duraciones[index]} min</p>
+                  </div>
                 </div>
               </div>
             ))}
