@@ -8,6 +8,7 @@ import {
   faPause,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import { Oval } from "react-loader-spinner";
 import styles from "./MeditacionDetalle.module.css";
 
 const MeditacionDetalle = () => {
@@ -83,8 +84,32 @@ const MeditacionDetalle = () => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
   if (loading) {
-    return <p>Cargando...</p>;
+    return (
+      <div className="loaderContainer">
+        <Oval
+          height={80}
+          width={80}
+          color="#912C8C"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="#F5B60F"
+          strokeWidth={5}
+          strokeWidthSecondary={5}
+        />
+      </div>
+    );
   }
 
   if (!meditacion) {
@@ -105,12 +130,9 @@ const MeditacionDetalle = () => {
       </div>
       <div className={styles.audioControl}>
         <div className={styles.playContainer}>
-            <a
-              onClick={handlePlayPauseClick}
-              className={styles.playPauseButton}
-            >
-              <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-            </a>
+          <a onClick={handlePlayPauseClick} className={styles.playPauseButton}>
+            <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+          </a>
         </div>
         <div className={styles.timeSlider}>
           <input
