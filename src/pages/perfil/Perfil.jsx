@@ -7,10 +7,7 @@ import styles from "./Perfil.module.css";
 import profileDefault from "../../assets/profile-default.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSignOutAlt,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faInfoCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import ModalConfirmacion from "../../components/modal/Modal";
@@ -18,12 +15,13 @@ import ModalInfo from "../../components/modal-info/ModalInfo";
 
 const Perfil = () => {
   const [userName, setUserName] = useState("");
-  const [userSurname, setUserSurname] = useState(""); // Estado para el apellido
+  const [userSurname, setUserSurname] = useState("");
   const [userType, setUserType] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
   const [loading, setLoading] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null); // Estado para el evento beforeinstallprompt
   const auth = getAuth(app);
   const navigate = useNavigate();
 
@@ -46,7 +44,7 @@ const Perfil = () => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
           setUserName(userData.name);
-          setUserSurname(userData.apellido); // Obtener y establecer el apellido
+          setUserSurname(userData.apellido);
           setUserType(userData.userType);
           setProfilePhoto(userData.photoURL || profileDefault);
           setLoading(false);
@@ -56,6 +54,19 @@ const Perfil = () => {
 
     fetchUserData();
   }, [auth, db]);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     setShowConfirmModal(true);
@@ -82,6 +93,19 @@ const Perfil = () => {
     navigate("/leer-informes");
   };
 
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        console.log("User accepted the install prompt");
+      } else {
+        console.log("User dismissed the install prompt");
+      }
+      setDeferredPrompt(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loaderContainer">
@@ -104,15 +128,11 @@ const Perfil = () => {
   return (
     <>
       <div className={styles.topProfileSection}>
-        {/* <button onClick={openModal} className="infoButton">
-          <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-        </button> */}
         <ModalInfo
           show={showModal}
           onClose={closeModal}
           content="Esta es la sección de tu perfil, en donde podes ver y editar tu información."
         />
-
         <div className={styles.perfilContainer}>
           <div className={styles.perfilHeader}>
             <div className={styles.topHeader}>
@@ -124,7 +144,7 @@ const Perfil = () => {
             <div className={styles.perfilImage}>
               <img src={profilePhoto} alt="Foto de perfil" />
             </div>
-            <h2>{`${userName} ${userSurname}`}</h2> {/* Mostrar nombre y apellido */}
+            <h2>{`${userName} ${userSurname}`}</h2>
             <a onClick={handleEditProfile} className={styles.changePhoto}>
               Cambiar foto
             </a>
@@ -138,10 +158,7 @@ const Perfil = () => {
           <div className={styles.informesSection} onClick={handleReadReports}>
             <div className={styles.linksInformes}>
               <div className={styles.linksInformesIcon}>
-                <FontAwesomeIcon
-                  icon={faFileAlt}
-                  className={styles.iconInformes}
-                />
+                <FontAwesomeIcon icon={faFileAlt} className={styles.iconInformes} />
               </div>
               <div>
                 <a>Informes</a>
@@ -156,6 +173,12 @@ const Perfil = () => {
         <div className={styles.linksCerrarSesion} onClick={handleSignOut}>
           <a>Cerrar sesión</a>
         </div>
+
+        {deferredPrompt && (
+          <button className={styles.installButton} onClick={handleInstallClick}>
+            Descargar aplicación
+          </button>
+        )}
       </div>
 
       {showConfirmModal && (

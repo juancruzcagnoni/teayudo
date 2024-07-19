@@ -4,7 +4,6 @@ const urlsToCache = [
   "/index.html",
   "/styles.css",
   "/script.js",
-  // Agrega aquí las rutas de otros recursos que quieras cachear
 ];
 
 self.addEventListener("install", (event) => {
