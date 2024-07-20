@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ModalInfo from "../../components/modal-info/ModalInfo";
-import MeditacionImagen from "../../assets/meditation-svgrepo-com.svg";
+import MeditacionImagen from "../../assets/meditacion.svg";
 
 const Meditacion = () => {
   const [meditaciones, setMeditaciones] = useState([]);
