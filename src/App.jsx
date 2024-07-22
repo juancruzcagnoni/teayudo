@@ -20,6 +20,8 @@ import { Oval } from "react-loader-spinner";
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   const auth = getAuth(app);
 
@@ -35,6 +37,21 @@ const App = () => {
 
     return () => unsubscribe();
   }, [auth]);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      setDeferredPrompt(event);
+      setShowInstallButton(true);
+      console.log('beforeinstallprompt event triggered');
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -71,23 +88,11 @@ const App = () => {
         <Route path="/comunicar" element={user ? <Comunicar /> : <Login />} />
         <Route path="/meditacion" element={user ? <Meditacion /> : <Login />} />
         <Route path="/meditacion/:id" element={<MeditacionDetalle />} />
-        <Route path="/perfil" element={user ? <Perfil /> : <Login />} />
-        <Route
-          path="/editar-perfil"
-          element={user ? <EditarPerfil /> : <Login />}
-        />
-        <Route
-          path="/crear-informe"
-          element={user ? <CrearInforme /> : <Login />}
-        />
-        <Route
-          path="/leer-informes"
-          element={user ? <LeerInforme /> : <Login />}
-        />
-        <Route
-          path="/ver-informe/:informeId"
-          element={user ? <VerInforme /> : <Login />}
-        />
+        <Route path="/perfil" element={user ? <Perfil deferredPrompt={deferredPrompt} showInstallButton={showInstallButton} /> : <Login />} />
+        <Route path="/editar-perfil" element={user ? <EditarPerfil /> : <Login />} />
+        <Route path="/crear-informe" element={user ? <CrearInforme /> : <Login />} />
+        <Route path="/leer-informes" element={user ? <LeerInforme /> : <Login />} />
+        <Route path="/ver-informe/:informeId" element={user ? <VerInforme /> : <Login />} />
         <Route path="/editar-informe/:informeId" element={<EditarInforme />} />
       </Routes>
     </Router>

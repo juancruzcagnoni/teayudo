@@ -191,9 +191,9 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
           {registrationError && <div className="error">{registrationError}</div>}
           {registrationSuccess && <div className="success">Registro exitoso. ¡Bienvenido!</div>}
           <p className="redirect">
-            ¿Ya tienes cuenta?{" "}
+            ¿Ya tenés cuenta?{" "}
             <a href="#" onClick={onIniciarSesion}>
-              Inicia sesión
+              Iniciá sesión
             </a>
           </p>
         </div>

@@ -10,19 +10,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSignOutAlt,
   faChevronRight,
+  faInfoCircle,
+  faEdit,
+  faFileAlt,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
-import { faInfoCircle, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 import ModalConfirmacion from "../../components/modal/Modal";
 import ModalInfo from "../../components/modal-info/ModalInfo";
 
-const Perfil = () => {
+const Perfil = ({ deferredPrompt, showInstallButton }) => {
   const [userName, setUserName] = useState("");
-  const [userSurname, setUserSurname] = useState(""); // Estado para el apellido
+  const [userSurname, setUserSurname] = useState("");
   const [userType, setUserType] = useState("");
   const [profilePhoto, setProfilePhoto] = useState("");
   const [loading, setLoading] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showInstallConfirmModal, setShowInstallConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const auth = getAuth(app);
   const navigate = useNavigate();
@@ -46,7 +49,7 @@ const Perfil = () => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
           setUserName(userData.name);
-          setUserSurname(userData.apellido); // Obtener y establecer el apellido
+          setUserSurname(userData.apellido);
           setUserType(userData.userType);
           setProfilePhoto(userData.photoURL || profileDefault);
           setLoading(false);
@@ -82,6 +85,27 @@ const Perfil = () => {
     navigate("/leer-informes");
   };
 
+  const handleInstallApp = async () => {
+    setShowInstallConfirmModal(true);
+  };
+
+  const handleConfirmInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the install prompt");
+      } else {
+        console.log("User dismissed the install prompt");
+      }
+    }
+    setShowInstallConfirmModal(false);
+  };
+
+  const handleCancelInstall = () => {
+    setShowInstallConfirmModal(false);
+  };
+
   if (loading) {
     return (
       <div className="loaderContainer">
@@ -104,9 +128,6 @@ const Perfil = () => {
   return (
     <>
       <div className={styles.topProfileSection}>
-        {/* <button onClick={openModal} className="infoButton">
-          <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-        </button> */}
         <ModalInfo
           show={showModal}
           onClose={closeModal}
@@ -117,14 +138,25 @@ const Perfil = () => {
           <div className={styles.perfilHeader}>
             <div className={styles.topHeader}>
               <h1 className="titleSection">Perfil</h1>
-              <a onClick={handleEditProfile} className={styles.editButton}>
-                <FontAwesomeIcon icon={faEdit} className="icon" />
-              </a>
+              <div>
+                <a onClick={handleEditProfile} className={styles.editButton}>
+                  <FontAwesomeIcon icon={faEdit} className="icon" />
+                </a>
+
+                {showInstallButton && (
+                  <a
+                    onClick={handleInstallApp}
+                    className={styles.installButton}
+                  >
+                    <FontAwesomeIcon icon={faDownload} className="icon" />
+                  </a>
+                )}
+              </div>
             </div>
             <div className={styles.perfilImage}>
               <img src={profilePhoto} alt="Foto de perfil" />
             </div>
-            <h2>{`${userName} ${userSurname}`}</h2> {/* Mostrar nombre y apellido */}
+            <h2>{`${userName} ${userSurname}`}</h2>
             <a onClick={handleEditProfile} className={styles.changePhoto}>
               Cambiar foto
             </a>
@@ -163,6 +195,14 @@ const Perfil = () => {
           mensaje="¿Estás seguro de que quieres cerrar sesión?"
           onConfirm={handleConfirmSignOut}
           onCancel={handleCancelSignOut}
+        />
+      )}
+
+      {showInstallConfirmModal && (
+        <ModalConfirmacion
+          mensaje="¿Estás seguro de que quieres instalar la aplicación?"
+          onConfirm={handleConfirmInstall}
+          onCancel={handleCancelInstall}
         />
       )}
     </>

@@ -123,7 +123,7 @@ const InicioSesion = ({ onVolverAtras, onRegistrarse }) => {
           {loginError && <div className="error">{loginError}</div>}
           {successMessage && <div className="succes">{successMessage}</div>}
           <p className="redirect">
-            ¿No tenes cuenta?{" "}
+            ¿No tenés cuenta?{" "}
             <a href="#" onClick={onRegistrarse}>
               Registrate.
             </a>
