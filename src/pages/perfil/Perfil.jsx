@@ -192,7 +192,7 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
 
       {showConfirmModal && (
         <ModalConfirmacion
-          mensaje="¿Estás seguro de que quieres cerrar sesión?"
+          mensaje="¿Estás seguro de que querés cerrar sesión?"
           onConfirm={handleConfirmSignOut}
           onCancel={handleCancelSignOut}
         />
@@ -200,7 +200,7 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
 
       {showInstallConfirmModal && (
         <ModalConfirmacion
-          mensaje="¿Estás seguro de que quieres instalar la aplicación?"
+          mensaje="¿Estás seguro de que querés instalar la aplicación?"
           onConfirm={handleConfirmInstall}
           onCancel={handleCancelInstall}
         />
