@@ -6,7 +6,9 @@ import {
   where,
   getDocs,
   addDoc,
-  serverTimestamp
+  updateDoc,
+  doc,
+  serverTimestamp,
 } from "firebase/firestore";
 import app from "../../js/config";
 import styles from "./Profesionales.module.css";
@@ -14,16 +16,21 @@ import { Oval } from "react-loader-spinner";
 import profileDefault from "../../assets/profile-default.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowLeft,
-  faFileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import { getAuth } from "firebase/auth";
+import ModalConfirmacion from "../../components/modal/Modal";
+import Alert from "../../components/alert/Alert";
 
 const Profesionales = () => {
   const [professionals, setProfessionals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [requesting, setRequesting] = useState(null); // Track the loading state for individual requests
+  const [requesting, setRequesting] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState(null);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [acceptedRequests, setAcceptedRequests] = useState([]);
   const db = getFirestore(app);
   const auth = getAuth(app);
   const navigate = useNavigate();
@@ -43,30 +50,98 @@ const Profesionales = () => {
       setLoading(false);
     };
 
+    const fetchPendingRequests = async () => {
+      const userId = auth.currentUser.uid;
+      const q = query(
+        collection(db, "reportRequests"),
+        where("userId", "==", userId),
+        where("status", "==", "pending")
+      );
+      const querySnapshot = await getDocs(q);
+      const requestsList = [];
+      querySnapshot.forEach((doc) => {
+        requestsList.push(doc.data().professionalId);
+      });
+      setPendingRequests(requestsList);
+    };
+
+    const fetchAcceptedRequests = async () => {
+      const userId = auth.currentUser.uid;
+      const q = query(
+        collection(db, "reportRequests"),
+        where("userId", "==", userId),
+        where("status", "==", "accepted")
+      );
+      const querySnapshot = await getDocs(q);
+      const requestsList = [];
+      querySnapshot.forEach((doc) => {
+        requestsList.push(doc.data().professionalId);
+      });
+      setAcceptedRequests(requestsList);
+    };
+
     fetchProfessionals();
-  }, [db]);
+    fetchPendingRequests();
+    fetchAcceptedRequests();
+  }, [db, auth]);
 
   const handleBack = () => {
     navigate("/perfil");
   };
 
-  const handleRequestReport = async (professionalId) => {
-    setRequesting(professionalId); // Set the loading state for the specific request
+  const handleRequestReport = (professionalId) => {
+    const hasPendingRequest = pendingRequests.includes(professionalId);
+    const hasAcceptedRequest = acceptedRequests.includes(professionalId);
+    if (hasPendingRequest) {
+      setAlertMessage("La solicitud está pendiente");
+      setAlertVisible(true);
+    } else if (hasAcceptedRequest) {
+      setAlertMessage("El profesional ya puede crear informes");
+      setAlertVisible(true);
+    } else {
+      setSelectedProfessional(professionalId);
+      setShowConfirmModal(true);
+    }
+  };
+
+  const confirmRequest = async () => {
+    setRequesting(selectedProfessional);
     try {
       const requestData = {
-        professionalId: professionalId,
-        userId: auth.currentUser.uid, // Add the ID of the user sending the request
+        professionalId: selectedProfessional,
+        userId: auth.currentUser.uid,
         timestamp: serverTimestamp(),
-        status: 'pending',
+        status: "pending",
       };
       await addDoc(collection(db, "reportRequests"), requestData);
-      alert("Solicitud de informe enviada con éxito");
+      setAlertMessage("Solicitud de informe enviada con éxito");
+      setAlertVisible(true);
     } catch (error) {
       console.error("Error al enviar la solicitud de informe:", error);
-      alert("Error al enviar la solicitud de informe");
+      setAlertMessage("Error al enviar la solicitud de informe");
+      setAlertVisible(true);
     }
-    setRequesting(null); // Clear the loading state for the specific request
+    setRequesting(null);
+    setShowConfirmModal(false);
   };
+
+  const cancelRequest = () => {
+    setShowConfirmModal(false);
+    setSelectedProfessional(null);
+  };
+
+  const closeAlert = () => {
+    setAlertVisible(false);
+  };
+
+  useEffect(() => {
+    if (alertVisible) {
+      const timer = setTimeout(() => {
+        setAlertVisible(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertVisible]);
 
   if (loading) {
     return (
@@ -88,35 +163,48 @@ const Profesionales = () => {
   }
 
   return (
-    <div className="padding-page">
-      <a onClick={handleBack} className="backButton">
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </a>
-      <h1 className="titleSection">Profesionales</h1>
-      {professionals.map((professional, index) => (
-        <div key={index} className={styles.usuario}>
-          <div className={styles.usuarioImgContainer}>
-            <img
-              src={professional.photoURL || profileDefault}
-              alt="Foto de perfil"
-              className={styles.usuarioImg}
-            />
+    <>
+      <div className="padding-page">
+        <a onClick={handleBack} className="backButton">
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </a>
+        <h1 className="titleSection">Profesionales</h1>
+        {professionals.map((professional, index) => (
+          <div key={index} className={styles.usuario}>
+            <div className={styles.profesionalLeft}>
+              <div className={styles.usuarioImgContainer}>
+                <img
+                  src={professional.photoURL || profileDefault}
+                  alt="Foto de perfil"
+                  className={styles.usuarioImg}
+                />
+              </div>
+              <div className={styles.usuarioInfo}>
+                <h2>{`${professional.name} ${professional.apellido}`}</h2>
+                <p>{professional.email}</p>
+              </div>
+            </div>
+            <div className={styles.informeButton}>
+              <a
+                onClick={() => handleRequestReport(professional.id)}
+                disabled={requesting === professional.id}
+                className={styles.requestButton}
+              >
+                <FontAwesomeIcon icon={faFileAlt} />
+              </a>
+            </div>
           </div>
-          <div className={styles.usuarioInfo}>
-            <h2>{`${professional.name} ${professional.apellido}`}</h2>
-            <p>{professional.email}</p>
-            <button
-              onClick={() => handleRequestReport(professional.id)}
-              disabled={requesting === professional.id}
-              className={styles.requestButton}
-            >
-              {requesting === professional.id ? 'Solicitando...' : 'Solicitar Informe'}
-              <FontAwesomeIcon icon={faFileAlt} />
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+      {showConfirmModal && (
+        <ModalConfirmacion
+          mensaje="¿Estás seguro de que querés enviar una solicitud de informe a este profesional?"
+          onConfirm={confirmRequest}
+          onCancel={cancelRequest}
+        />
+      )}
+      {alertVisible && <Alert message={alertMessage} onClose={closeAlert} />}
+    </>
   );
 };
 
