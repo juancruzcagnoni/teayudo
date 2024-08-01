@@ -193,6 +193,7 @@ textarea {
 .columnInforme {
   display: flex;
   flex-direction: column;
+  margin-top: 1.2rem;
 }
 
 .rowInforme {
@@ -202,7 +203,7 @@ textarea {
 
 .informeTable td {
   border: 1px solid #ddd;
-  padding: 4px;
+  padding: 0.4rem;
 }
 
 .informeTable tr {
