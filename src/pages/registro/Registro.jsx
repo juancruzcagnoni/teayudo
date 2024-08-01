@@ -16,6 +16,8 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
   const [apellido, setApellido] = useState(""); // Estado para el apellido
   const [profileImage, setProfileImage] = useState(null);
   const [userType, setUserType] = useState(""); // Estado para el tipo de usuario
+  const [profession, setProfession] = useState(""); // Estado para la profesión
+  const [showProfessionSelect, setShowProfessionSelect] = useState(false); // Estado para mostrar el select de profesión
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [registrationError, setRegistrationError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +45,11 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
       return;
     }
 
+    if (userType === "profesional" && !profession) {
+      setRegistrationError("Por favor, selecciona tu profesión.");
+      return;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -53,6 +60,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
         apellido, // Almacenar el apellido
         email,
         userType, // Almacenar el tipo de usuario
+        profession: userType === "profesional" ? profession : "", // Almacenar la profesión si es profesional
         role: "client",
       });
 
@@ -94,6 +102,12 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
+  };
+
+  const handleUserTypeChange = (e) => {
+    const selectedType = e.target.value;
+    setUserType(selectedType);
+    setShowProfessionSelect(selectedType === "profesional"); // Muestra el select de profesión si es profesional
   };
 
   return (
@@ -180,7 +194,7 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
             <label>Tipo de Usuario *</label>
             <select
               value={userType}
-              onChange={(e) => setUserType(e.target.value)}
+              onChange={handleUserTypeChange}
               required
             >
               <option value="">Seleccionar...</option>
@@ -188,6 +202,21 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
               <option value="niño/a">Niño/a</option>
             </select>
           </div>
+          {showProfessionSelect && (
+            <div className="camposContainer">
+              <label>Profesión *</label>
+              <select
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                required
+              >
+                <option value="">Seleccionar profesión...</option>
+                <option value="profesor">Profesor</option>
+                <option value="psicologo">Psicólogo</option>
+                <option value="terapeuta">Terapeuta</option>
+              </select>
+            </div>
+          )}
           {registrationError && <div className="error">{registrationError}</div>}
           {registrationSuccess && <div className="success">Registro exitoso. ¡Bienvenido!</div>}
           <p className="redirect">

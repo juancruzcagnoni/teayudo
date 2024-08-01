@@ -6,8 +6,6 @@ import {
   where,
   getDocs,
   addDoc,
-  updateDoc,
-  doc,
   serverTimestamp,
 } from "firebase/firestore";
 import app from "../../js/config";
@@ -31,6 +29,8 @@ const Profesionales = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
+  const [filterType, setFilterType] = useState(""); // Estado para el tipo de profesional
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
   const db = getFirestore(app);
   const auth = getAuth(app);
   const navigate = useNavigate();
@@ -143,6 +143,16 @@ const Profesionales = () => {
     }
   }, [alertVisible]);
 
+  // Filtrar y buscar profesionales
+  const filteredProfessionals = professionals
+    .filter((professional) =>
+      filterType ? professional.profession === filterType : true
+    )
+    .filter((professional) =>
+      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.apellido.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
   if (loading) {
     return (
       <div className="loaderContainer">
@@ -169,7 +179,26 @@ const Profesionales = () => {
           <FontAwesomeIcon icon={faArrowLeft} />
         </a>
         <h1 className="titleSection">Profesionales</h1>
-        {professionals.map((professional, index) => (
+        <div className={styles.filtersContainer}>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="">Todos los tipos</option>
+            <option value="psicologo">Psicólogo</option>
+            <option value="psiquiatra">Psiquiatra</option>
+            <option value="terapeuta">Terapeuta</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+        {filteredProfessionals.map((professional, index) => (
           <div key={index} className={styles.usuario}>
             <div className={styles.profesionalLeft}>
               <div className={styles.usuarioImgContainer}>

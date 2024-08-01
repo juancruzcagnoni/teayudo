@@ -125,7 +125,7 @@ const MeditacionDetalle = () => {
         <img src={meditacion.imagen} alt={meditacion.titulo} />
       </div>
       <div className={styles.containerMeditacionText}>
-        <p>Usà tu respiración</p>
+        <p>Usá tu respiración</p>
         <h1>{meditacion.titulo}</h1>
       </div>
       <div className={styles.audioControl}>

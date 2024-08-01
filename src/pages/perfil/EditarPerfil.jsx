@@ -20,7 +20,6 @@ import { faArrowLeft, faTimes, faEye, faEyeSlash } from "@fortawesome/free-solid
 import app from "../../js/config";
 import { useNavigate } from "react-router-dom";
 import styles from "./EditarPerfil.module.css";
-import { Oval } from "react-loader-spinner";
 import ModalConfirmacion from "../../components/modal/Modal";
 import profileDefault from "../../assets/profile-default.jpg";
 
@@ -33,6 +32,8 @@ const EditarPerfil = () => {
   const [newPassword, setNewPassword] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profession, setProfession] = useState(""); // Estado para la profesión
+  const [isProfessional, setIsProfessional] = useState(false); // Estado para verificar si el usuario es profesional
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [message, setMessage] = useState("");
@@ -59,6 +60,8 @@ const EditarPerfil = () => {
             setSurname(userData.apellido || ""); // Obtener y establecer el apellido
             setEmail(user.email || "");
             setProfileImageUrl(userData.photoURL || profileDefault);
+            setIsProfessional(userData.userType === "profesional");
+            setProfession(userData.profession || ""); // Obtener y establecer la profesión si existe
             setLoading(false);
           }
         }
@@ -121,6 +124,11 @@ const EditarPerfil = () => {
         await deleteObject(storageRef).catch((error) => {
           console.log("Error eliminando la foto de perfil:", error);
         });
+      }
+
+      if (isProfessional && profession) {
+        const userDocRef = doc(db, "usuarios", user.uid);
+        await updateDoc(userDocRef, { profession });
       }
 
       setMessage("Perfil actualizado exitosamente");
@@ -230,6 +238,21 @@ const EditarPerfil = () => {
               onChange={(e) => setSurname(e.target.value)}
             />
           </div>
+          {isProfessional && (
+            <div className="camposContainer">
+              <label>Profesión</label>
+              <select
+                value={profession}
+                onChange={(e) => setProfession(e.target.value)}
+                required
+              >
+                <option value="">Seleccionar profesión...</option>
+                <option value="profesor">Profesor</option>
+                <option value="psicologo">Psicólogo</option>
+                <option value="terapeuta">Terapeuta</option>
+              </select>
+            </div>
+          )}
           <div className="camposContainer">
             <label>Contraseña actual</label>
             <div className="passwordContainer">

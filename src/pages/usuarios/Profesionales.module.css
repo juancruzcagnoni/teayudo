@@ -49,3 +49,9 @@
 .informeButton a{
   color: var(--primary-color);
 }
+
+.filtersContainer{
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
