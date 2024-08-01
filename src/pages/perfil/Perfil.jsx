@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import app from "../../js/config";
 import { Oval } from "react-loader-spinner";
 import styles from "./Perfil.module.css";
@@ -14,6 +22,7 @@ import {
   faEdit,
   faFileAlt,
   faDownload,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import ModalConfirmacion from "../../components/modal/Modal";
 import ModalInfo from "../../components/modal-info/ModalInfo";
@@ -27,9 +36,9 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showInstallConfirmModal, setShowInstallConfirmModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [reportRequestsCount, setReportRequestsCount] = useState(0);
   const auth = getAuth(app);
   const navigate = useNavigate();
-
   const db = getFirestore(app);
 
   const openModal = () => {
@@ -52,6 +61,17 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
           setUserSurname(userData.apellido);
           setUserType(userData.userType);
           setProfilePhoto(userData.photoURL || profileDefault);
+
+          if (userData.userType === "profesional") {
+            const reportRequestsQuery = query(
+              collection(db, "reportRequests"),
+              where("professionalId", "==", user.uid),
+              where("status", "==", "pending")
+            );
+            const querySnapshot = await getDocs(reportRequestsQuery);
+            setReportRequestsCount(querySnapshot.size);
+          }
+
           setLoading(false);
         }
       }
@@ -83,6 +103,14 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
 
   const handleReadReports = () => {
     navigate("/leer-informes");
+  };
+
+  const handleViewProfessionals = () => {
+    navigate("/profesionales");
+  };
+
+  const handleViewPatients = () => {
+    navigate("/pacientes");
   };
 
   const handleInstallApp = async () => {
@@ -183,6 +211,51 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
               <FontAwesomeIcon icon={faChevronRight} />
             </span>
           </div>
+
+          {/* Tarjeta de Pacientes (solo visible para profesionales) */}
+          {userType === "profesional" && (
+            <div className={styles.informesSection} onClick={handleViewPatients}>
+              {reportRequestsCount > 0 && (
+                <div className={styles.notificationBadge}>
+                  {reportRequestsCount}
+                </div>
+              )}
+              <div className={styles.linksInformes}>
+                <div className={styles.linksInformesIcon}>
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className={styles.iconInformes}
+                  />
+                </div>
+                <div>
+                  <a>Pacientes</a>
+                </div>
+              </div>
+              <span className={styles.arrowIcon}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </span>
+            </div>
+          )}
+
+          {/* Tarjeta de Profesionales (solo visible para niños/as) */}
+          {userType === "niño/a" && (
+            <div className={styles.informesSection} onClick={handleViewProfessionals}>
+              <div className={styles.linksInformes}>
+                <div className={styles.linksInformesIcon}>
+                  <FontAwesomeIcon
+                    icon={faUsers}
+                    className={styles.iconInformes}
+                  />
+                </div>
+                <div>
+                  <a>Profesionales</a>
+                </div>
+              </div>
+              <span className={styles.arrowIcon}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </span>
+            </div>
+          )}
         </div>
 
         <div className={styles.linksCerrarSesion} onClick={handleSignOut}>

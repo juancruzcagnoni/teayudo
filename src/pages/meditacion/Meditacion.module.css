@@ -110,3 +110,10 @@
     margin: 0;
   }
 }
+
+@media (min-width: 768px) {
+  .meditacionHeader {
+    width: 60%;
+    margin: 0 auto;
+  }
+}

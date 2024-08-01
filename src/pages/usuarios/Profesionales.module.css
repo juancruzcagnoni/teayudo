@@ -1,0 +1,38 @@
+.usuario {
+  margin: 0.8rem 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  background-color: #912c8c2f;
+  padding: 0.2rem 0.2rem;
+}
+
+.usuarioImgContainer {
+  color: var(--primary-color);
+  border-radius: 5px;
+  padding: 8px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.8rem;
+  height: 70px;
+  width: 70px;
+}
+
+.usuarioImg {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.usuarioInfo h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.usuarioInfo p {
+  margin: 0;
+}

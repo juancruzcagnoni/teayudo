@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,
@@ -7,6 +7,8 @@ import {
   query,
   where,
   getDocs,
+  doc,
+  getDoc
 } from "firebase/firestore";
 import app from "../../js/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,9 +33,37 @@ const CrearInforme = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [acceptedUsers, setAcceptedUsers] = useState([]);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAcceptedUsers = async () => {
+      const userId = auth.currentUser.uid;
+
+      // Fetch accepted requests
+      const acceptedQuery = query(
+        collection(db, "reportRequests"),
+        where("professionalId", "==", userId),
+        where("status", "==", "accepted")
+      );
+      const acceptedSnapshot = await getDocs(acceptedQuery);
+      const usersList = [];
+      for (const docSnapshot of acceptedSnapshot.docs) {
+        const requestData = docSnapshot.data();
+        const patientDocRef = doc(db, "usuarios", requestData.userId);
+        const patientDocSnapshot = await getDoc(patientDocRef);
+        if (patientDocSnapshot.exists()) {
+          const patientData = patientDocSnapshot.data();
+          usersList.push({ label: patientData.email, value: patientData.email });
+        }
+      }
+      setAcceptedUsers(usersList);
+    };
+
+    fetchAcceptedUsers();
+  }, [db, auth]);
 
   const handleBack = () => {
     navigate("/perfil");
@@ -88,18 +118,10 @@ const CrearInforme = () => {
   };
 
   const loadOptions = async (inputValue) => {
-    const q = query(
-      collection(db, "usuarios"),
-      where("email", ">=", inputValue),
-      where("email", "<=", inputValue + "\uf8ff")
+    // Filter the accepted users by the input value
+    return acceptedUsers.filter(user =>
+      user.label.toLowerCase().includes(inputValue.toLowerCase())
     );
-    const querySnapshot = await getDocs(q);
-    const options = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      options.push({ label: data.email, value: data.email });
-    });
-    return options;
   };
 
   return (
@@ -124,7 +146,7 @@ const CrearInforme = () => {
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
               required
-              />
+            />
           </div>
           <div className={styles.camposFlex}>
             <div className="camposContainer" style={{ width: "60%" }}>
@@ -133,7 +155,7 @@ const CrearInforme = () => {
                 cacheOptions
                 loadOptions={loadOptions}
                 onChange={setPersonaEvaluada}
-                defaultOptions
+                defaultOptions={acceptedUsers}
                 value={personaEvaluada}
                 placeholder="Buscar por email"
                 required
@@ -150,7 +172,7 @@ const CrearInforme = () => {
                 value={fecha}
                 onChange={(e) => setFecha(e.target.value)}
                 required
-                />
+              />
             </div>
           </div>
           <div className="camposContainer">
@@ -160,7 +182,7 @@ const CrearInforme = () => {
               type="text"
               value={diagnostico}
               onChange={(e) => setDiagnostico(e.target.value)}
-              />
+            />
           </div>
           <div className={styles.camposFlex}>
             <div className="camposContainer" style={{ width: "60%" }}>
@@ -170,19 +192,19 @@ const CrearInforme = () => {
                 type="text"
                 value={escuela}
                 onChange={(e) => setEscuela(e.target.value)}
-                />
+              />
             </div>
             <div
               className="camposContainer"
               style={{ width: "40%", marginLeft: "0.5rem" }}
-              >
+            >
               <label>Grado/Año</label>
               <input
                 placeholder="Grado/Año"
                 type="text"
                 value={grado}
                 onChange={(e) => setGrado(e.target.value)}
-                />
+              />
             </div>
           </div>
           <div className="camposContainer">
@@ -192,7 +214,7 @@ const CrearInforme = () => {
               value={objetivos}
               onChange={(e) => setObjetivos(e.target.value)}
               style={{ height: "50px" }}
-              ></textarea>
+            ></textarea>
           </div>
           <div className="camposContainer">
             <label>Fortalezas en el desempeño</label>
@@ -201,7 +223,7 @@ const CrearInforme = () => {
               value={fortalezas}
               onChange={(e) => setFortalezas(e.target.value)}
               style={{ height: "50px" }}
-              ></textarea>
+            ></textarea>
           </div>
           <div className="camposContainer">
             <label>Desafíos en el desempeño</label>
@@ -210,7 +232,7 @@ const CrearInforme = () => {
               value={desafios}
               onChange={(e) => setDesafios(e.target.value)}
               style={{ height: "50px" }}
-              ></textarea>
+            ></textarea>
           </div>
           <div className="camposContainer">
             <label>Intervenciones</label>
@@ -219,7 +241,7 @@ const CrearInforme = () => {
               value={intervenciones}
               onChange={(e) => setIntervenciones(e.target.value)}
               style={{ height: "50px" }}
-              ></textarea>
+            ></textarea>
           </div>
           <div className="camposContainer">
             <label>Observaciones</label>
@@ -228,7 +250,7 @@ const CrearInforme = () => {
               value={observaciones}
               onChange={(e) => setObservaciones(e.target.value)}
               required
-              ></textarea>
+            ></textarea>
           </div>
           {error && <p className="error">{error}</p>}
           {successMessage && <p className="success">{successMessage}</p>}

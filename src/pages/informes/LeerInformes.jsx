@@ -84,7 +84,7 @@ const LeerInformes = () => {
         );
 
         const allInformes = fetchedInformes.concat(fetchedInformesEvaluado);
-        
+
         // Fetch creator emails if user is a child
         if (userType === "niño/a") {
           const informesWithCreatorEmails = await Promise.all(
@@ -146,10 +146,10 @@ const LeerInformes = () => {
 
   return (
     <div className="padding-page">
-      <div className={styles.leerInformesContainer}>
         <a onClick={handleBack} className="backButton">
           <FontAwesomeIcon icon={faArrowLeft} />
         </a>
+      <div className={styles.leerInformesContainer}>
         {userType !== "niño/a" && (
           <div className={styles.createButton} onClick={handleCreateReport}>
             <FontAwesomeIcon icon={faPlus} />

@@ -74,13 +74,13 @@ const VerInforme = () => {
   
     const tableRows = [
       ["Fecha", new Date(informe.fecha).toLocaleDateString()],
-      ["Persona Evaluada", informe.personaEvaluada],
+      ["Persona evaluada", informe.personaEvaluada],
       ["Diagnóstico", informe.diagnostico],
       ["Escuela", informe.escuela],
       ["Grado/Año", informe.grado],
       ["Objetivos", informe.objetivos],
-      ["Fortalezas en el Desempeño", informe.fortalezas],
-      ["Desafíos en el Desempeño", informe.desafios],
+      ["Fortalezas en el desempeño", informe.fortalezas],
+      ["Desafíos en el desempeño", informe.desafios],
       ["Intervenciones", informe.intervenciones],
       ["Observaciones", informe.observaciones],
     ];

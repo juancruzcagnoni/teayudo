@@ -16,6 +16,8 @@ import EditarInforme from "./pages/informes/EditarInforme";
 import app from "./js/config";
 import "./App.css";
 import { Oval } from "react-loader-spinner";
+import Profesionales from "./pages/usuarios/Profesionales";
+import Pacientes from "./pages/usuarios/Pacientes";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -94,6 +96,8 @@ const App = () => {
         <Route path="/leer-informes" element={user ? <LeerInforme /> : <Login />} />
         <Route path="/ver-informe/:informeId" element={user ? <VerInforme /> : <Login />} />
         <Route path="/editar-informe/:informeId" element={<EditarInforme />} />
+        <Route path="/profesionales" element={user ? <Profesionales /> : <Login />} />
+        <Route path="/pacientes" element={user ? <Pacientes /> : <Login />} />
       </Routes>
     </Router>
   );

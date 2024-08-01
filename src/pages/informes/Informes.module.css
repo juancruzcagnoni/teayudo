@@ -250,3 +250,10 @@ textarea {
   font-family: var(--font-family);
   font-weight: 600;
 }
+
+@media (min-width: 768px) {
+  .leerInformesContainer, .verInformeContainer{
+    width: 60%;
+    margin: 0 auto;
+  }
+}
