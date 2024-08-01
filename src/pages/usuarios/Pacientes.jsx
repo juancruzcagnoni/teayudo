@@ -205,7 +205,7 @@ const Pacientes = () => {
       <div className={styles.header}>
         <h1 className="titleSection">Pacientes</h1>
         <div className={styles.bellIconContainer} onClick={toggleModal}>
-          <FontAwesomeIcon icon={faBell} />
+          <FontAwesomeIcon icon={faBell} className={styles.campana} />
           {requests.pending.length > 0 && (
             <div className={styles.notificationBadge}>
               {requests.pending.length}
