@@ -148,9 +148,10 @@ const Profesionales = () => {
     .filter((professional) =>
       filterType ? professional.profession === filterType : true
     )
-    .filter((professional) =>
-      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      professional.apellido.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter(
+      (professional) =>
+        professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        professional.apellido.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   if (loading) {
@@ -180,6 +181,13 @@ const Profesionales = () => {
         </a>
         <h1 className="titleSection">Profesionales</h1>
         <div className={styles.filtersContainer}>
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
@@ -190,13 +198,6 @@ const Profesionales = () => {
             <option value="psiquiatra">Psiquiatra</option>
             <option value="terapeuta">Terapeuta</option>
           </select>
-          <input
-            type="text"
-            placeholder="Buscar por nombre"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
         </div>
         {filteredProfessionals.map((professional, index) => (
           <div key={index} className={styles.usuario}>

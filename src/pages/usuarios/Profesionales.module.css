@@ -27,7 +27,7 @@
   object-fit: cover;
 }
 
-.profesionalLeft{
+.profesionalLeft {
   display: flex;
   align-items: center;
 }
@@ -42,16 +42,33 @@
   font-size: 0.9rem;
 }
 
-.informeButton{
+.informeButton {
   padding: 1rem;
 }
 
-.informeButton a{
+.informeButton a {
   color: var(--primary-color);
 }
 
-.filtersContainer{
+.filtersContainer {
   margin-top: 1rem;
   display: flex;
   justify-content: space-between;
+}
+
+.filterSelect {
+  color: var(--primary-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 30px;
+  border: none;
+  background-color: var(--secondary-color);
+}
+
+.searchInput {
+  color: var(--primary-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 30px;
+  border: none;
+  background-color: var(--secondary-color);
+  width: 40%;
 }
