@@ -14,10 +14,11 @@ import { Oval } from "react-loader-spinner";
 import profileDefault from "../../assets/profile-default.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faFileAlt, faInfoCircle  } from "@fortawesome/free-solid-svg-icons";
 import { getAuth } from "firebase/auth";
 import ModalConfirmacion from "../../components/modal/Modal";
 import Alert from "../../components/alert/Alert";
+import ModalInfo from "../../components/modal-info/ModalInfo"
 
 const Profesionales = () => {
   const [professionals, setProfessionals] = useState([]);
@@ -31,9 +32,18 @@ const Profesionales = () => {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [filterType, setFilterType] = useState(""); // Estado para el tipo de profesional
   const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const [showModalInfo, setShowModalInfo] = useState(false);
   const db = getFirestore(app);
   const auth = getAuth(app);
   const navigate = useNavigate();
+
+  const openModal = () => {
+    setShowModalInfo(true);
+  };
+
+  const closeModal = () => {
+    setShowModalInfo(false);
+  };
 
   useEffect(() => {
     const fetchProfessionals = async () => {
@@ -176,55 +186,65 @@ const Profesionales = () => {
   return (
     <>
       <div className="padding-page">
+        <button onClick={openModal} className="infoButton">
+          <FontAwesomeIcon icon={faInfoCircle} size="2x" />
+        </button>
+        <ModalInfo
+          show={showModalInfo}
+          onClose={closeModal}
+          content="Esta es la sección en donde podes ver a todos los profesionales de la aplicación y podes enviarles solicitudes de informes."
+        />
         <a onClick={handleBack} className="backButton">
           <FontAwesomeIcon icon={faArrowLeft} />
         </a>
-        <h1 className="titleSection">Profesionales</h1>
-        <div className={styles.filtersContainer}>
-          <input
-            type="text"
-            placeholder="Buscar por nombre"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="">Todos los tipos</option>
-            <option value="psicologo">Psicólogo</option>
-            <option value="psiquiatra">Psiquiatra</option>
-            <option value="terapeuta">Terapeuta</option>
-          </select>
-        </div>
-        {filteredProfessionals.map((professional, index) => (
-          <div key={index} className={styles.usuario}>
-            <div className={styles.profesionalLeft}>
-              <div className={styles.usuarioImgContainer}>
-                <img
-                  src={professional.photoURL || profileDefault}
-                  alt="Foto de perfil"
-                  className={styles.usuarioImg}
-                />
-              </div>
-              <div className={styles.usuarioInfo}>
-                <h2>{`${professional.name} ${professional.apellido}`}</h2>
-                <p>{professional.email}</p>
-              </div>
-            </div>
-            <div className={styles.informeButton}>
-              <a
-                onClick={() => handleRequestReport(professional.id)}
-                disabled={requesting === professional.id}
-                className={styles.requestButton}
-              >
-                <FontAwesomeIcon icon={faFileAlt} />
-              </a>
-            </div>
+        <div className={styles.container}>
+          <h1 className="titleSection">Profesionales</h1>
+          <div className={styles.filtersContainer}>
+            <input
+              type="text"
+              placeholder="Buscar por nombre"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={styles.searchInput}
+            />
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="">Todos los tipos</option>
+              <option value="psicologo">Psicólogo</option>
+              <option value="profesor">Profesor</option>
+              <option value="terapeuta">Terapeuta</option>
+            </select>
           </div>
-        ))}
+          {filteredProfessionals.map((professional, index) => (
+            <div key={index} className={styles.usuario}>
+              <div className={styles.profesionalLeft}>
+                <div className={styles.usuarioImgContainer}>
+                  <img
+                    src={professional.photoURL || profileDefault}
+                    alt="Foto de perfil"
+                    className={styles.usuarioImg}
+                  />
+                </div>
+                <div className={styles.usuarioInfo}>
+                  <h2>{`${professional.name} ${professional.apellido}`}</h2>
+                  <p className="capitalized">{professional.profession}</p>
+                </div>
+              </div>
+              <div className={styles.informeButton}>
+                <a
+                  onClick={() => handleRequestReport(professional.id)}
+                  disabled={requesting === professional.id}
+                  className={styles.requestButton}
+                >
+                  <FontAwesomeIcon icon={faFileAlt} />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       {showConfirmModal && (
         <ModalConfirmacion

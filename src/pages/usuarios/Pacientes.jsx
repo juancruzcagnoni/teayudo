@@ -20,21 +20,34 @@ import {
   faCheckCircle,
   faTimesCircle,
   faBell,
+  faInfoCircle,
+  faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import { getAuth } from "firebase/auth";
-import ModalSolic from "../../components/modal-solic/ModalSolic"; // Asumiendo que tienes un componente Modal
-import Alert from "../../components/alert/Alert"; // Asegúrate de ajustar la ruta según sea necesario
+import ModalSolic from "../../components/modal-solic/ModalSolic";
+import Alert from "../../components/alert/Alert";
+import ModalInfo from "../../components/modal-info/ModalInfo";
 
 const Pacientes = () => {
   const [requests, setRequests] = useState({ pending: [], accepted: [] });
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(null); // Track the loading state for individual updates
-  const [showModal, setShowModal] = useState(false); // Estado para controlar la ventana modal
+  const [updating, setUpdating] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showModalInfo, setShowModalInfo] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const db = getFirestore(app);
   const auth = getAuth(app);
   const navigate = useNavigate();
+
+  const openModal = () => {
+    setShowModalInfo(true);
+  };
+
+  const closeModal = () => {
+    setShowModalInfo(false);
+  };
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -98,14 +111,16 @@ const Pacientes = () => {
   };
 
   const handleUpdateRequest = async (requestId, status) => {
-    setUpdating(requestId); // Set the loading state for the specific update
+    setUpdating(requestId);
     try {
       const requestDocRef = doc(db, "reportRequests", requestId);
       await updateDoc(requestDocRef, { status });
-      setAlertMessage(`Solicitud ${status === "accepted" ? "aceptada" : "denegada"} con éxito`);
-      setAlertVisible(true); // Show the alert
+      setAlertMessage(
+        `Solicitud ${status === "accepted" ? "aceptada" : "denegada"} con éxito`
+      );
+      setAlertVisible(true);
 
-      setUpdating(null); // Clear the loading state for the specific update
+      setUpdating(null);
 
       // Refresh the list of requests
       const userId = auth.currentUser.uid;
@@ -160,9 +175,14 @@ const Pacientes = () => {
     } catch (error) {
       console.error("Error al actualizar la solicitud:", error);
       setAlertMessage("Error al actualizar la solicitud");
-      setAlertVisible(true); // Show the alert
-      setUpdating(null); // Clear the loading state in case of error
+      setAlertVisible(true);
+      setUpdating(null);
     }
+  };
+
+  const handlePatientClick = (email) => {
+    console.log("Navigating to reports with email:", email);
+    navigate(`/informes/${encodeURIComponent(email)}`);
   };
 
   const toggleModal = () => {
@@ -177,6 +197,18 @@ const Pacientes = () => {
       return () => clearTimeout(timer);
     }
   }, [alertVisible]);
+
+  const filteredAcceptedRequests = requests.accepted.filter((patient) =>
+    `${patient.name} ${patient.apellido}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  const filteredPendingRequests = requests.pending.filter((patient) =>
+    `${patient.name} ${patient.apellido}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -199,92 +231,122 @@ const Pacientes = () => {
 
   return (
     <div className="padding-page">
+      <button onClick={openModal} className="infoButton">
+        <FontAwesomeIcon icon={faInfoCircle} size="2x" />
+      </button>
+      <ModalInfo
+        show={showModalInfo}
+        onClose={closeModal}
+        content="Esta es la sección en donde podes ver a todos los pacientes y donde podes ver las solicitudes que te envien."
+      />
+
       <a onClick={handleBack} className="backButton">
         <FontAwesomeIcon icon={faArrowLeft} />
       </a>
-      <div className={styles.header}>
-        <h1 className="titleSection">Pacientes</h1>
-        <div className={styles.bellIconContainer} onClick={toggleModal}>
-          <FontAwesomeIcon icon={faBell} className={styles.campana} />
-          {requests.pending.length > 0 && (
-            <div className={styles.notificationBadge}>
-              {requests.pending.length}
-            </div>
-          )}
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className="titleSection">Pacientes</h1>
+          <div className={styles.bellIconContainer} onClick={toggleModal}>
+            <FontAwesomeIcon icon={faBell} className={styles.campana} />
+            {requests.pending.length > 0 && (
+              <div className={styles.notificationBadge}>
+                {requests.pending.length}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <section>
-        {requests.accepted.length > 0 ? (
-          requests.accepted.map((patient, index) => (
-            <div key={index} className={styles.usuario}>
-              <div className={styles.usuarioImgContainer}>
-                <img
-                  src={patient.photoURL || profileDefault}
-                  alt="Foto de perfil"
-                  className={styles.usuarioImg}
-                />
-              </div>
-              <div className={styles.usuarioInfoAccepted}>
-                <div>
-                  <h3>{`${patient.name} ${patient.apellido}`}</h3>
-                  <p>{patient.email}</p>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No hay pacientes con solicitudes aceptadas.</p>
-        )}
-      </section>
-      {showModal && (
-        <ModalSolic onClose={toggleModal}>
-          <h2>Solicitudes</h2>
-          <ul className={styles.listaPending}>
-            {requests.pending.map((patient, index) => (
-              <li key={index} className={styles.modalItem}>
-                <div className={styles.usuarioImgContainer}>
-                  <img
-                    src={patient.photoURL || profileDefault}
-                    alt="Foto de perfil"
-                    className={styles.usuarioImg}
-                  />
-                </div>
-                <div className={styles.modalItemInfo}>
-                  <h3>{`${patient.name} ${patient.apellido}`}</h3>
-                  <p>{patient.email}</p>
-                  <div className={styles.modalButtonContainer}>
-                    <a
-                      onClick={() =>
-                        handleUpdateRequest(patient.requestId, "accepted")
-                      }
-                      disabled={updating === patient.requestId}
-                      className={styles.modalAcceptButton}
-                    >
-                      Aceptar
-                    </a>
-                    <a
-                      onClick={() =>
-                        handleUpdateRequest(patient.requestId, "denied")
-                      }
-                      disabled={updating === patient.requestId}
-                      className={styles.modalDenyButton}
-                    >
-                      Denegar
-                    </a>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="Buscar por nombre"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <section>
+          {filteredAcceptedRequests.length > 0 ? (
+            filteredAcceptedRequests.map((patient, index) => (
+              <div
+                key={index}
+                className={styles.usuario}
+                onClick={() => handlePatientClick(patient.email)}
+              >
+                <div className={styles.pacienteInfo}>
+                  <div className={styles.usuarioImgContainer}>
+                    <img
+                      src={patient.photoURL || profileDefault}
+                      alt="Foto de perfil"
+                      className={styles.usuarioImg}
+                    />
+                  </div>
+                  <div className={styles.usuarioInfoAccepted}>
+                    <div>
+                      <h3>{`${patient.name} ${patient.apellido}`}</h3>
+                      <p>{patient.email}</p>
+                    </div>
                   </div>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </ModalSolic>
-      )}
-      {alertVisible && (
-        <Alert
-          message={alertMessage}
-          onClose={() => setAlertVisible(false)}
-        />
-      )}
+                <span className={styles.arrowIcon}>
+                  <FontAwesomeIcon icon={faChevronRight} />
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>No hay pacientes con solicitudes aceptadas.</p>
+          )}
+        </section>
+        {showModal && (
+          <ModalSolic onClose={toggleModal}>
+            <h2>Solicitudes</h2>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Buscar por nombre"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <ul className={styles.listaPending}>
+              {filteredPendingRequests.map((patient, index) => (
+                <li key={index} className={styles.modalItem}>
+                  <div className={styles.usuarioImgContainer}>
+                    <img
+                      src={patient.photoURL || profileDefault}
+                      alt="Foto de perfil"
+                      className={styles.usuarioImg}
+                    />
+                  </div>
+                  <div className={styles.modalItemInfo}>
+                    <h3>{`${patient.name} ${patient.apellido}`}</h3>
+                    <p>{patient.email}</p>
+                    <div className={styles.modalButtonContainer}>
+                      <a
+                        onClick={() =>
+                          handleUpdateRequest(patient.requestId, "accepted")
+                        }
+                        disabled={updating === patient.requestId}
+                        className={styles.modalAcceptButton}
+                      >
+                        Aceptar
+                      </a>
+                      <a
+                        onClick={() =>
+                          handleUpdateRequest(patient.requestId, "denied")
+                        }
+                        disabled={updating === patient.requestId}
+                        className={styles.modalDenyButton}
+                      >
+                        Rechazar
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </ModalSolic>
+        )}
+      </div>
+      {alertVisible && <Alert message={alertMessage} />}
     </div>
   );
 };

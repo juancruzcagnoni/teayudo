@@ -75,6 +75,10 @@ a {
   text-align: center;
 }
 
+.capitalized {
+  text-transform: capitalize;
+}
+
 .success {
   color: green;
   text-align: center;

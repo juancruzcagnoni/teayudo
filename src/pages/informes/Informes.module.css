@@ -1,3 +1,8 @@
+.container {
+  width: 60%;
+  margin: 0 auto;
+}
+
 /* Crear */
 .crear {
   background-color: var(--secondaryv2-color);
@@ -51,6 +56,26 @@ textarea {
 
 .ordenButton {
   color: var(--primary-color);
+}
+
+.ordenButtonPaciente {
+  color: var(--primary-color);
+  margin-top: 1rem;
+}
+
+.topInformesPacientes{
+  display: flex; 
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.searchInput {
+  color: var(--primary-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 30px;
+  border: none;
+  background-color: var(--secondary-color);
+  width: 40%;
 }
 
 .createButton:hover {
@@ -256,5 +281,12 @@ textarea {
   .leerInformesContainer, .verInformeContainer{
     width: 60%;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    margin: 0;
   }
 }

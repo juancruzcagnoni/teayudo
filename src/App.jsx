@@ -12,7 +12,10 @@ import Navbar from "./components/nav/Nav";
 import CrearInforme from "./pages/informes/CrearInformes";
 import LeerInforme from "./pages/informes/LeerInformes";
 import VerInforme from "./pages/informes/VerInforme";
+import VerInformePaciente from "./pages/informes/VerInformePaciente";
 import EditarInforme from "./pages/informes/EditarInforme";
+import EditarInformePaciente from "./pages/informes/EditarInformesPaciente";
+import InformesPaciente from "./pages/informes/InformesPaciente";
 import app from "./js/config";
 import "./App.css";
 import { Oval } from "react-loader-spinner";
@@ -95,9 +98,12 @@ const App = () => {
         <Route path="/crear-informe" element={user ? <CrearInforme /> : <Login />} />
         <Route path="/leer-informes" element={user ? <LeerInforme /> : <Login />} />
         <Route path="/ver-informe/:informeId" element={user ? <VerInforme /> : <Login />} />
+        <Route path="/ver-informe-paciente/:informeId" element={user ? <VerInformePaciente /> : <Login />} />
         <Route path="/editar-informe/:informeId" element={<EditarInforme />} />
+        <Route path="/editar-informe-paciente/:informeId" element={<EditarInformePaciente />} />
         <Route path="/profesionales" element={user ? <Profesionales /> : <Login />} />
         <Route path="/pacientes" element={user ? <Pacientes /> : <Login />} />
+        <Route path="/informes/:email" element={<InformesPaciente />} />
       </Routes>
     </Router>
   );

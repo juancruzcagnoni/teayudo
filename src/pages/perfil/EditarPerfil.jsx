@@ -21,6 +21,7 @@ import app from "../../js/config";
 import { useNavigate } from "react-router-dom";
 import styles from "./EditarPerfil.module.css";
 import ModalConfirmacion from "../../components/modal/Modal";
+import Alert from "../../components/alert/Alert";
 import profileDefault from "../../assets/profile-default.jpg";
 
 const EditarPerfil = () => {
@@ -42,6 +43,8 @@ const EditarPerfil = () => {
   const [removeProfileImage, setRemoveProfileImage] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña actual
   const [showNewPassword, setShowNewPassword] = useState(false); // Estado para mostrar/ocultar la nueva contraseña
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
@@ -96,9 +99,10 @@ const EditarPerfil = () => {
       if (newEmail && newEmail !== user.email) {
         await reauthenticateWithCredential(user, credential);
         await sendEmailVerification(user);
-        setMessage(
+        setAlertMessage(
           "Se ha enviado un correo de verificación. Por favor verifica tu nuevo correo electrónico."
         );
+        setShowAlert(true);
         setUpdating(false);
         return;
       }
@@ -131,20 +135,22 @@ const EditarPerfil = () => {
         await updateDoc(userDocRef, { profession });
       }
 
-      setMessage("Perfil actualizado exitosamente");
+      setAlertMessage("Perfil actualizado exitosamente");
+      setShowAlert(true);
       setTimeout(() => {
-        setMessage("");
+        setShowAlert(false);
         navigate("/perfil");
       }, 3000);
     } catch (error) {
       if (error.code === "auth/requires-recent-login") {
-        setMessage(
+        setAlertMessage(
           "Por favor, vuelva a iniciar sesión para realizar esta operación."
         );
       } else {
         console.error("Error al actualizar perfil:", error);
-        setMessage(`Error al actualizar perfil: ${error.message}`);
+        setAlertMessage(`Error al actualizar perfil: ${error.message}`);
       }
+      setShowAlert(true);
     } finally {
       setUpdating(false);
     }
@@ -313,6 +319,7 @@ const EditarPerfil = () => {
           onCancel={handleCancelRemoveProfileImage}
         />
       )}
+      {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} />}
     </div>
   );
 };
