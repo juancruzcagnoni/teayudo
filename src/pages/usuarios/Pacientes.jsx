@@ -299,13 +299,6 @@ const Pacientes = () => {
         {showModal && (
           <ModalSolic onClose={toggleModal}>
             <h2>Solicitudes</h2>
-            <input
-              type="text"
-              className={styles.searchInput}
-              placeholder="Buscar por nombre"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
             <ul className={styles.listaPending}>
               {filteredPendingRequests.map((patient, index) => (
                 <li key={index} className={styles.modalItem}>
