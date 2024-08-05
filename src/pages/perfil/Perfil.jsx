@@ -26,6 +26,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ModalConfirmacion from "../../components/modal/Modal";
 import ModalInfo from "../../components/modal-info/ModalInfo";
+import Logo from "../../assets/logo192x192.png";
 
 const Perfil = ({ deferredPrompt, showInstallButton }) => {
   const [userName, setUserName] = useState("");
@@ -165,7 +166,12 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
         <div className={styles.perfilContainer}>
           <div className={styles.perfilHeader}>
             <div className={styles.topHeader}>
-              <h1 className="titleSection">Perfil</h1>
+              <div className={styles.profileTitle}>
+                <h1 className="titleSection">Perfil</h1>
+                <div className={styles.logoPerfilContainer}>
+                  <img src={Logo} alt="" />
+                </div>
+              </div>
               <div>
                 <a onClick={handleEditProfile} className={styles.editButton}>
                   <FontAwesomeIcon icon={faEdit} className="icon" />
@@ -214,7 +220,10 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
 
           {/* Tarjeta de Pacientes (solo visible para profesionales) */}
           {userType === "profesional" && (
-            <div className={styles.informesSection} onClick={handleViewPatients}>
+            <div
+              className={styles.informesSection}
+              onClick={handleViewPatients}
+            >
               {reportRequestsCount > 0 && (
                 <div className={styles.notificationBadge}>
                   {reportRequestsCount}
@@ -239,7 +248,10 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
 
           {/* Tarjeta de Profesionales (solo visible para niños/as) */}
           {userType === "niño/a" && (
-            <div className={styles.informesSection} onClick={handleViewProfessionals}>
+            <div
+              className={styles.informesSection}
+              onClick={handleViewProfessionals}
+            >
               <div className={styles.linksInformes}>
                 <div className={styles.linksInformesIcon}>
                   <FontAwesomeIcon

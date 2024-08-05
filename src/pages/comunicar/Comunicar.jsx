@@ -15,6 +15,7 @@ import { faStar, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { Oval } from "react-loader-spinner";
 import ModalInfo from "../../components/modal-info/ModalInfo";
+import Logo from "../../assets/logo192x192.png"
 
 const Comunicar = () => {
   const [botones, setBotones] = useState([]);
@@ -164,9 +165,9 @@ const Comunicar = () => {
 
   return (
     <div className="padding-page">
-      <button onClick={openModal} className="infoButton">
-        <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-      </button>
+      <a onClick={openModal} className="infoButton">
+        <img src={Logo} alt="" srcset="" />
+      </a>
       <ModalInfo
         show={showModal}
         onClose={closeModal}

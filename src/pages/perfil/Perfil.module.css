@@ -3,10 +3,31 @@
   padding-top: 1.4rem;
 }
 
+.profileTitle{
+  display: flex;
+  align-items: center;
+}
+
+.profileTitle h1{
+  margin: 0;
+}
+
 .perfilContainer {
   width: 60%;
   margin: 0 auto;
   position: relative;
+}
+
+.logoPerfilContainer {
+  height: 40px;
+  width: 40px;
+  margin-left: 0.5rem;
+}
+
+.logoPerfilContainer img{
+  border-radius: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .editButton {
@@ -27,7 +48,7 @@
 .topHeader {
   display: flex;
   justify-content: space-between;
-  align-items: top;
+  align-items: flex-start;
 }
 
 .perfilImage {

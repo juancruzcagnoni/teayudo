@@ -21,12 +21,13 @@ import {
   faTimesCircle,
   faBell,
   faInfoCircle,
-  faChevronRight
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { getAuth } from "firebase/auth";
 import ModalSolic from "../../components/modal-solic/ModalSolic";
 import Alert from "../../components/alert/Alert";
 import ModalInfo from "../../components/modal-info/ModalInfo";
+import Logo from "../../assets/logo192x192.png";
 
 const Pacientes = () => {
   const [requests, setRequests] = useState({ pending: [], accepted: [] });
@@ -231,9 +232,9 @@ const Pacientes = () => {
 
   return (
     <div className="padding-page">
-      <button onClick={openModal} className="infoButton">
-        <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-      </button>
+      <a onClick={openModal} className="infoButton">
+        <img src={Logo} alt="" srcset="" />
+      </a>
       <ModalInfo
         show={showModalInfo}
         onClose={closeModal}

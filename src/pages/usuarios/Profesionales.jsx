@@ -14,11 +14,16 @@ import { Oval } from "react-loader-spinner";
 import profileDefault from "../../assets/profile-default.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faFileAlt, faInfoCircle  } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faFileAlt,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { getAuth } from "firebase/auth";
 import ModalConfirmacion from "../../components/modal/Modal";
 import Alert from "../../components/alert/Alert";
-import ModalInfo from "../../components/modal-info/ModalInfo"
+import ModalInfo from "../../components/modal-info/ModalInfo";
+import Logo from "../../assets/logo192x192.png";
 
 const Profesionales = () => {
   const [professionals, setProfessionals] = useState([]);
@@ -186,9 +191,9 @@ const Profesionales = () => {
   return (
     <>
       <div className="padding-page">
-        <button onClick={openModal} className="infoButton">
-          <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-        </button>
+        <a onClick={openModal} className="infoButton">
+          <img src={Logo} alt="" srcset="" />
+        </a>
         <ModalInfo
           show={showModalInfo}
           onClose={closeModal}

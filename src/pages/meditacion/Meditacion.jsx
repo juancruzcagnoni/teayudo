@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import ModalInfo from "../../components/modal-info/ModalInfo";
 import MeditacionImagen from "../../assets/meditacion.svg";
+import Logo from "../../assets/logo192x192.png"
 
 const Meditacion = () => {
   const [meditaciones, setMeditaciones] = useState([]);
@@ -78,9 +79,9 @@ const Meditacion = () => {
 
   return (
     <>
-      <button onClick={openModal} className="infoButton">
-        <FontAwesomeIcon icon={faInfoCircle} size="2x" />
-      </button>
+      <a onClick={openModal} className="infoButton">
+        <img src={Logo} alt="" srcset="" />
+      </a>
       <ModalInfo
         show={showModal}
         onClose={closeModal}
