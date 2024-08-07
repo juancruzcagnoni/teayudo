@@ -12,8 +12,9 @@
 
 .loginLogo {
   width: 170px;
-  margin-top: 4rem;
-  margin-bottom: 7rem;
+  /* margin-top: 4rem;
+  margin-bottom: 7rem; */
+  margin: auto;
 }
 
 .bottom {
