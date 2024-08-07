@@ -54,7 +54,6 @@ const Pacientes = () => {
     const fetchRequests = async () => {
       const userId = auth.currentUser.uid;
 
-      // Fetch pending requests
       const pendingQuery = query(
         collection(db, "reportRequests"),
         where("professionalId", "==", userId),
@@ -77,7 +76,6 @@ const Pacientes = () => {
         }
       }
 
-      // Fetch accepted requests
       const acceptedQuery = query(
         collection(db, "reportRequests"),
         where("professionalId", "==", userId),
@@ -123,10 +121,8 @@ const Pacientes = () => {
 
       setUpdating(null);
 
-      // Refresh the list of requests
       const userId = auth.currentUser.uid;
 
-      // Fetch pending requests
       const pendingQuery = query(
         collection(db, "reportRequests"),
         where("professionalId", "==", userId),

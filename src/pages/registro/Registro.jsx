@@ -214,6 +214,9 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
                 <option value="profesor">Profesor</option>
                 <option value="psicologo">Psicólogo</option>
                 <option value="terapeuta">Terapeuta</option>
+                <option value="psicopedagogo">Psicodagogo</option>
+                <option value="pediatra">Pediatra</option>
+                <option value="pedagogo">Pedagogo</option>
               </select>
             </div>
           )}

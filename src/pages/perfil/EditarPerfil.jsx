@@ -16,7 +16,12 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faTimes, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faTimes,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import app from "../../js/config";
 import { useNavigate } from "react-router-dom";
 import styles from "./EditarPerfil.module.css";
@@ -26,23 +31,23 @@ import profileDefault from "../../assets/profile-default.jpg";
 
 const EditarPerfil = () => {
   const [name, setName] = useState("");
-  const [surname, setSurname] = useState(""); // Estado para el apellido
+  const [surname, setSurname] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState("");
-  const [profession, setProfession] = useState(""); // Estado para la profesión
-  const [isProfessional, setIsProfessional] = useState(false); // Estado para verificar si el usuario es profesional
+  const [profession, setProfession] = useState("");
+  const [isProfessional, setIsProfessional] = useState(false); 
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [message, setMessage] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeleteImageModal, setShowDeleteImageModal] = useState(false);
   const [removeProfileImage, setRemoveProfileImage] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña actual
-  const [showNewPassword, setShowNewPassword] = useState(false); // Estado para mostrar/ocultar la nueva contraseña
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false); 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const auth = getAuth(app);
@@ -60,11 +65,11 @@ const EditarPerfil = () => {
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
             setName(userData.name || "");
-            setSurname(userData.apellido || ""); // Obtener y establecer el apellido
+            setSurname(userData.apellido || "");
             setEmail(user.email || "");
             setProfileImageUrl(userData.photoURL || profileDefault);
             setIsProfessional(userData.userType === "profesional");
-            setProfession(userData.profession || ""); // Obtener y establecer la profesión si existe
+            setProfession(userData.profession || "");
             setLoading(false);
           }
         }
@@ -256,6 +261,9 @@ const EditarPerfil = () => {
                 <option value="profesor">Profesor</option>
                 <option value="psicologo">Psicólogo</option>
                 <option value="terapeuta">Terapeuta</option>
+                <option value="psicopedagogo">Psicodagogo</option>
+                <option value="pediatra">Pediatra</option>
+                <option value="pedagogo">Pedagogo</option>
               </select>
             </div>
           )}
@@ -264,14 +272,14 @@ const EditarPerfil = () => {
             <div className="passwordContainer">
               <input
                 placeholder="Contraseña actual"
-                type={showPassword ? "text" : "password"} // Mostrar contraseña según el estado
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="passwordInput"
               />
               <a
                 className={"togglePasswordButton"}
-                onClick={() => togglePasswordVisibility("current")} // Alternar visibilidad de la contraseña actual
+                onClick={() => togglePasswordVisibility("current")} 
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </a>
@@ -282,14 +290,14 @@ const EditarPerfil = () => {
             <div className="passwordContainer">
               <input
                 placeholder="Contraseña nueva"
-                type={showNewPassword ? "text" : "password"} // Mostrar contraseña según el estado
+                type={showNewPassword ? "text" : "password"} 
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="passwordInput"
               />
               <a
                 className={"togglePasswordButton"}
-                onClick={() => togglePasswordVisibility("new")} // Alternar visibilidad de la nueva contraseña
+                onClick={() => togglePasswordVisibility("new")} 
               >
                 <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
               </a>
@@ -319,7 +327,9 @@ const EditarPerfil = () => {
           onCancel={handleCancelRemoveProfileImage}
         />
       )}
-      {showAlert && <Alert message={alertMessage} onClose={() => setShowAlert(false)} />}
+      {showAlert && (
+        <Alert message={alertMessage} onClose={() => setShowAlert(false)} />
+      )}
     </div>
   );
 };

@@ -35,8 +35,8 @@ const Profesionales = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [acceptedRequests, setAcceptedRequests] = useState([]);
-  const [filterType, setFilterType] = useState(""); // Estado para el tipo de profesional
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const [filterType, setFilterType] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [showModalInfo, setShowModalInfo] = useState(false);
   const db = getFirestore(app);
   const auth = getAuth(app);
@@ -158,7 +158,6 @@ const Profesionales = () => {
     }
   }, [alertVisible]);
 
-  // Filtrar y buscar profesionales
   const filteredProfessionals = professionals
     .filter((professional) =>
       filterType ? professional.profession === filterType : true
@@ -217,10 +216,13 @@ const Profesionales = () => {
               onChange={(e) => setFilterType(e.target.value)}
               className={styles.filterSelect}
             >
-              <option value="">Todos los tipos</option>
-              <option value="psicologo">Psicólogo</option>
+              <option value="">Seleccionar profesión...</option>
               <option value="profesor">Profesor</option>
+              <option value="psicologo">Psicólogo</option>
               <option value="terapeuta">Terapeuta</option>
+              <option value="psicopedagogo">Psicodagogo</option>
+              <option value="pediatra">Pediatra</option>
+              <option value="pedagogo">Pedagogo</option>
             </select>
           </div>
           {filteredProfessionals.map((professional, index) => (

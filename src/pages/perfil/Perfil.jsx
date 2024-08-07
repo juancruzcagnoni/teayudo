@@ -218,7 +218,6 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
             </span>
           </div>
 
-          {/* Tarjeta de Pacientes (solo visible para profesionales) */}
           {userType === "profesional" && (
             <div
               className={styles.informesSection}
@@ -246,7 +245,6 @@ const Perfil = ({ deferredPrompt, showInstallButton }) => {
             </div>
           )}
 
-          {/* Tarjeta de Profesionales (solo visible para niños/as) */}
           {userType === "niño/a" && (
             <div
               className={styles.informesSection}

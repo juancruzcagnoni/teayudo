@@ -22,7 +22,7 @@ const VerInforme = () => {
   const auth = getAuth(app);
   const db = getFirestore(app);
   const navigate = useNavigate();
-  const location = useLocation(); // Para obtener el estado de navegación
+  const location = useLocation(); 
 
   const handleBack = () => {
     navigate(`/informes/${informe?.personaEvaluada}`);

@@ -52,7 +52,7 @@ const Meditacion = () => {
           [index]:
             Math.floor(audio.duration / 60) +
             ":" +
-            ("0" + Math.floor(audio.duration % 60)).slice(-2), // Convertir a minutos y segundos
+            ("0" + Math.floor(audio.duration % 60)).slice(-2),
         }));
       });
     });

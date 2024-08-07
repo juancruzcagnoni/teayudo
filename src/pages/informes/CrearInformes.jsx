@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import styles from "./Informes.module.css";
 import ModalConfirmacion from "../../components/modal/Modal";
-import Alert from "../../components/alert/Alert"; // Importa el nuevo componente de alerta
+import Alert from "../../components/alert/Alert"; 
 
 const CrearInforme = () => {
   const [titulo, setTitulo] = useState("");
@@ -34,7 +34,7 @@ const CrearInforme = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [showAlert, setShowAlert] = useState(false); // Estado para mostrar la alerta
+  const [showAlert, setShowAlert] = useState(false);
   const [acceptedUsers, setAcceptedUsers] = useState([]);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -83,7 +83,7 @@ const CrearInforme = () => {
       const docRef = await addDoc(collection(db, "informes"), {
         titulo,
         fecha,
-        personaEvaluada: personaEvaluada.value, // Guarda el email seleccionado
+        personaEvaluada: personaEvaluada.value, 
         diagnostico,
         escuela,
         grado,
@@ -97,10 +97,10 @@ const CrearInforme = () => {
 
       setSuccessMessage("Informe creado exitosamente");
       setError("");
-      setShowAlert(true); // Muestra la alerta de éxito
+      setShowAlert(true); 
       setTimeout(() => {
         navigate("/perfil");
-      }, 3000); // Redirigir a perfil después de 3 segundos
+      }, 3000);
     } catch (error) {
       console.error("Error al crear informe:", error);
       setError("Error al crear el informe. Inténtalo de nuevo más tarde.");
@@ -121,7 +121,6 @@ const CrearInforme = () => {
   };
 
   const loadOptions = async (inputValue) => {
-    // Filter the accepted users by the input value
     return acceptedUsers.filter(user =>
       user.label.toLowerCase().includes(inputValue.toLowerCase())
     );
