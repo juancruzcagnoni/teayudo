@@ -31,7 +31,7 @@ import profileDefault from "../../assets/profile-default.jpg";
 
 const EditarPerfil = () => {
   const [name, setName] = useState("");
-  const [surname, setSurname] = useState(""); 
+  const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -39,7 +39,7 @@ const EditarPerfil = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImageUrl, setProfileImageUrl] = useState("");
   const [profession, setProfession] = useState("");
-  const [isProfessional, setIsProfessional] = useState(false); 
+  const [isProfessional, setIsProfessional] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [message, setMessage] = useState("");
@@ -47,7 +47,7 @@ const EditarPerfil = () => {
   const [showDeleteImageModal, setShowDeleteImageModal] = useState(false);
   const [removeProfileImage, setRemoveProfileImage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false); 
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const auth = getAuth(app);
@@ -264,6 +264,7 @@ const EditarPerfil = () => {
                 <option value="psicopedagogo">Psicodagogo</option>
                 <option value="pediatra">Pediatra</option>
                 <option value="pedagogo">Pedagogo</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
           )}
@@ -279,7 +280,7 @@ const EditarPerfil = () => {
               />
               <a
                 className={"togglePasswordButton"}
-                onClick={() => togglePasswordVisibility("current")} 
+                onClick={() => togglePasswordVisibility("current")}
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </a>
@@ -290,14 +291,14 @@ const EditarPerfil = () => {
             <div className="passwordContainer">
               <input
                 placeholder="Contraseña nueva"
-                type={showNewPassword ? "text" : "password"} 
+                type={showNewPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="passwordInput"
               />
               <a
                 className={"togglePasswordButton"}
-                onClick={() => togglePasswordVisibility("new")} 
+                onClick={() => togglePasswordVisibility("new")}
               >
                 <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
               </a>

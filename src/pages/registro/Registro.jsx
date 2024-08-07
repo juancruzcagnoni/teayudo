@@ -4,7 +4,11 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import validator from "https://cdn.skypack.dev/validator";
 import styles from "./Registro.module.css";
 
@@ -41,7 +45,9 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
     }
 
     if (!userType) {
-      setRegistrationError("Por favor, selecciona si eres Profesional o Niño/a.");
+      setRegistrationError(
+        "Por favor, selecciona si eres Profesional o Niño/a."
+      );
       return;
     }
 
@@ -51,7 +57,11 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
       const userDocRef = doc(db, "usuarios", user.uid);
@@ -101,7 +111,9 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
   };
 
   const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
+    setShowConfirmPassword(
+      (prevShowConfirmPassword) => !prevShowConfirmPassword
+    );
   };
 
   const handleUserTypeChange = (e) => {
@@ -186,17 +198,15 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
                 className="togglePasswordButton"
                 onClick={toggleConfirmPasswordVisibility}
               >
-                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                <FontAwesomeIcon
+                  icon={showConfirmPassword ? faEyeSlash : faEye}
+                />
               </a>
             </div>
           </div>
           <div className="camposContainer">
             <label>Tipo de Usuario *</label>
-            <select
-              value={userType}
-              onChange={handleUserTypeChange}
-              required
-            >
+            <select value={userType} onChange={handleUserTypeChange} required>
               <option value="">Seleccionar...</option>
               <option value="profesional">Profesional</option>
               <option value="niño/a">Niño/a</option>
@@ -217,11 +227,16 @@ const Registro = ({ onVolverAtras, onIniciarSesion }) => {
                 <option value="psicopedagogo">Psicodagogo</option>
                 <option value="pediatra">Pediatra</option>
                 <option value="pedagogo">Pedagogo</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
           )}
-          {registrationError && <div className="error">{registrationError}</div>}
-          {registrationSuccess && <div className="success">Registro exitoso. ¡Bienvenido!</div>}
+          {registrationError && (
+            <div className="error">{registrationError}</div>
+          )}
+          {registrationSuccess && (
+            <div className="success">Registro exitoso. ¡Bienvenido!</div>
+          )}
           <p className="redirect">
             ¿Ya tenés cuenta?{" "}
             <a href="#" onClick={onIniciarSesion}>
