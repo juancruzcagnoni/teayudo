@@ -191,7 +191,7 @@ const Profesionales = () => {
     <>
       <div className="padding-page">
         <a onClick={openModal} className="infoButton">
-          <img src={Logo} alt="" srcset="" />
+          <img src={Logo} alt="Logo"/>
         </a>
         <ModalInfo
           show={showModalInfo}
@@ -206,7 +206,7 @@ const Profesionales = () => {
           <div className={styles.filtersContainer}>
             <input
               type="text"
-              placeholder="Buscar por nombre"
+              placeholder="Buscar"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchInput}

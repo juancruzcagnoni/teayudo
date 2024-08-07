@@ -108,7 +108,7 @@ const InformesPaciente = () => {
         <div className={styles.topInformesPacientes}>
           <input
             type="text"
-            placeholder="Buscar por título..."
+            placeholder="Buscar"
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
