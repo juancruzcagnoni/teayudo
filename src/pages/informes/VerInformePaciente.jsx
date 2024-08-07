@@ -5,7 +5,12 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faDownload, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faDownload,
+  faTrash,
+  faEdit,
+} from "@fortawesome/free-solid-svg-icons";
 import app from "../../js/config";
 import { Oval } from "react-loader-spinner";
 import styles from "./Informes.module.css";
@@ -22,7 +27,7 @@ const VerInforme = () => {
   const auth = getAuth(app);
   const db = getFirestore(app);
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
 
   const handleBack = () => {
     navigate(`/informes/${informe?.personaEvaluada}`);
@@ -67,7 +72,7 @@ const VerInforme = () => {
     const doc = new jsPDF();
     doc.setFontSize(20);
     doc.text(informe.titulo, 10, 20);
-  
+
     const tableRows = [
       ["Fecha", new Date(informe.fecha).toLocaleDateString()],
       ["Persona evaluada", informe.personaEvaluada],
@@ -80,20 +85,20 @@ const VerInforme = () => {
       ["Intervenciones", informe.intervenciones],
       ["Observaciones", informe.observaciones],
     ];
-  
+
     doc.autoTable({
       head: [["Campo", "Valor"]],
       body: tableRows,
       startY: 30,
     });
-  
+
     doc.save(`${informe.titulo}.pdf`);
-  };  
+  };
 
   const handleDeleteInforme = async () => {
     try {
       await deleteDoc(doc(db, "informes", informeId));
-      navigate("/leer-informes");
+      navigate(`/informes/${informe?.personaEvaluada}`);
     } catch (error) {
       console.error("Error al eliminar el informe:", error);
     }
@@ -151,99 +156,101 @@ const VerInforme = () => {
       <div className={styles.container}>
         <h2 className="titleSection">{informe.titulo}</h2>
         <div className={styles.verInformeContainer}>
-        <table className={styles.informeTable}>
-          <tbody>
-            <tr>
-              <td className={styles.tableHeaderTitulo}>{informe.titulo}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Fecha</td>
-              <td>{new Date(informe.fecha).toLocaleDateString()}</td>
-            </tr>
-            {userType === "niño/a" && (
-              <tr className={styles.columnInforme}>
-                <td className={styles.tableHeader}>Creado por</td>
-                <td>{creadorInforme}</td>
+          <table className={styles.informeTable}>
+            <tbody>
+              <tr>
+                <td className={styles.tableHeaderTitulo}>{informe.titulo}</td>
               </tr>
-            )}
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Niño/a</td>
-              <td>{informe.personaEvaluada}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Diagnóstico</td>
-              <td>{informe.diagnostico}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Escuela</td>
-              <td>{informe.escuela}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Grado/Año</td>
-              <td>{informe.grado}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Objetivos</td>
-              <td>{informe.objetivos}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Fortalezas en el desempeño</td>
-              <td>{informe.fortalezas}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Desafíos en el desempeño</td>
-              <td>{informe.desafios}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Intervenciones</td>
-              <td>{informe.intervenciones}</td>
-            </tr>
-            <tr className={styles.columnInforme}>
-              <td className={styles.tableHeader}>Observaciones</td>
-              <td>{informe.observaciones}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div className={styles.informeHeader}>
-          <div className={styles.buttonsContainer}>
-            <button
-              onClick={openDownloadModal}
-              className={styles.downloadButton}
-            >
-              <FontAwesomeIcon icon={faDownload} />
-            </button>
-            {userType !== "niño/a" && (
-              <>
-                <button
-                  onClick={handleEditInforme}
-                  className={styles.editButton}
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-                <button
-                  onClick={openDeleteModal}
-                  className={styles.deleteButton}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              </>
-            )}
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Fecha</td>
+                <td>{new Date(informe.fecha).toLocaleDateString()}</td>
+              </tr>
+              {userType === "niño/a" && (
+                <tr className={styles.columnInforme}>
+                  <td className={styles.tableHeader}>Creado por</td>
+                  <td>{creadorInforme}</td>
+                </tr>
+              )}
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Niño/a</td>
+                <td>{informe.personaEvaluada}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Diagnóstico</td>
+                <td>{informe.diagnostico}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Escuela</td>
+                <td>{informe.escuela}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Grado/Año</td>
+                <td>{informe.grado}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Objetivos</td>
+                <td>{informe.objetivos}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>
+                  Fortalezas en el desempeño
+                </td>
+                <td>{informe.fortalezas}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Desafíos en el desempeño</td>
+                <td>{informe.desafios}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Intervenciones</td>
+                <td>{informe.intervenciones}</td>
+              </tr>
+              <tr className={styles.columnInforme}>
+                <td className={styles.tableHeader}>Observaciones</td>
+                <td>{informe.observaciones}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div className={styles.informeHeader}>
+            <div className={styles.buttonsContainer}>
+              <button
+                onClick={openDownloadModal}
+                className={styles.downloadButton}
+              >
+                <FontAwesomeIcon icon={faDownload} />
+              </button>
+              {userType !== "niño/a" && (
+                <>
+                  <button
+                    onClick={handleEditInforme}
+                    className={styles.editButton}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                  <button
+                    onClick={openDeleteModal}
+                    className={styles.deleteButton}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
         {showDeleteModal && (
           <ModalConfirmacion
-            isOpen={showDeleteModal}
-            onClose={() => setShowDeleteModal(false)}
-            onConfirm={handleDelete}
-            message="¿Estás seguro de que deseas eliminar este informe?"
+            mensaje="¿Estás seguro que deseas eliminar este informe?"
+            onConfirm={handleDeleteInforme}
+            onCancel={closeDeleteModal}
           />
         )}
+
         {showDownloadModal && (
           <ModalConfirmacion
-            isOpen={showDownloadModal}
-            onClose={() => setShowDownloadModal(false)}
-            message="Informe descargado exitosamente."
+            mensaje="¿Querés descargar este informe en formato PDF?"
+            onConfirm={confirmDownloadPDF}
+            onCancel={closeDownloadModal}
           />
         )}
       </div>

@@ -256,7 +256,7 @@ const Pacientes = () => {
         <input
           type="text"
           className={styles.searchInput}
-          placeholder="Buscar por nombre"
+          placeholder="Buscar"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

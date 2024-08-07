@@ -216,7 +216,7 @@ const Profesionales = () => {
               onChange={(e) => setFilterType(e.target.value)}
               className={styles.filterSelect}
             >
-              <option value="">Seleccionar profesión...</option>
+              <option value="">Profesión</option>
               <option value="profesor">Profesor</option>
               <option value="psicologo">Psicólogo</option>
               <option value="terapeuta">Terapeuta</option>

@@ -75,13 +75,13 @@ textarea {
   border-radius: 30px;
   border: none;
   background-color: var(--secondary-color);
-  width: 40%;
+  width: 30%;
 }
 
 .createButton:hover {
   background-color: var(
     --secondary-color-light
-  ); /* Color de fondo al pasar el mouse */
+  ); 
 }
 
 .informeRight {

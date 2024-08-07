@@ -75,7 +75,7 @@
   border-radius: 30px;
   border: none;
   background-color: var(--secondary-color);
-  width: 40%;
+  width: 30%;
 }
 
 @media (max-width: 768px) {
