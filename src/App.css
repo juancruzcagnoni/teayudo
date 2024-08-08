@@ -200,3 +200,17 @@ a {
   display: flex;
   justify-content: center;
 }
+
+.acceso-denegado{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.acceso-denegado p{
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+}

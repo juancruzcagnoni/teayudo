@@ -166,7 +166,7 @@ const Comunicar = () => {
   return (
     <div className="padding-page">
       <a onClick={openModal} className="infoButton">
-        <img src={Logo} alt="" srcset="" />
+        <img src={Logo} alt="" />
       </a>
       <ModalInfo
         show={showModal}
