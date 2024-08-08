@@ -15,7 +15,7 @@ import { faStar, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { Oval } from "react-loader-spinner";
 import ModalInfo from "../../components/modal-info/ModalInfo";
-import Logo from "../../assets/logo192x192.png"
+import Logo from "../../assets/logo192x192.png";
 
 const Comunicar = () => {
   const [botones, setBotones] = useState([]);
@@ -25,6 +25,7 @@ const Comunicar = () => {
   const [mostrarFavoritos, setMostrarFavoritos] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [favoritos, setFavoritos] = useState([]);
+  const [actualizandoFavorito, setActualizandoFavorito] = useState(null); 
 
   const db = getFirestore(app);
   const auth = getAuth(app);
@@ -105,10 +106,12 @@ const Comunicar = () => {
   const toggleFavorito = async (botonId) => {
     if (!user) return;
 
-    try {
-      const userDocRef = doc(db, "usuarios", user.uid);
-      const userDoc = await getDoc(userDocRef);
+    setActualizandoFavorito(botonId); 
 
+    const userDocRef = doc(db, "usuarios", user.uid);
+
+    try {
+      const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
         let favoritos = userData.botonesFavoritos || [];
@@ -120,11 +123,12 @@ const Comunicar = () => {
         }
 
         await updateDoc(userDocRef, { botonesFavoritos: favoritos });
-
         setFavoritos(favoritos);
       }
     } catch (error) {
       console.error("Error al actualizar favorito:", error);
+    } finally {
+      setActualizandoFavorito(null); 
     }
   };
 
@@ -210,6 +214,7 @@ const Comunicar = () => {
             <button
               className={styles.favoritoButton}
               onClick={() => toggleFavorito(boton.id)}
+              disabled={actualizandoFavorito === boton.id} 
             >
               <FontAwesomeIcon
                 icon={boton.favorito ? faStar : farStar}
