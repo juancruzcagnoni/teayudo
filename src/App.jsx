@@ -115,13 +115,20 @@ const App = () => {
         <Route
           path="/perfil"
           element={
-            <Perfil
-              deferredPrompt={deferredPrompt}
-              showInstallButton={showInstallButton}
-            />
+            user ? (
+              <Perfil
+                deferredPrompt={deferredPrompt}
+                showInstallButton={showInstallButton}
+              />
+            ) : (
+              <Login />
+            )
           }
         />
-        <Route path="/editar-perfil" element={<EditarPerfil />} />
+        <Route
+          path="/editar-perfil"
+          element={user ? <EditarPerfil /> : <Login />}
+        />
 
         {/* Rutas para profesionales */}
         <Route
